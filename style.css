@@ -1,0 +1,91 @@
+:root {
+    --bg-main: #FDECEF;
+    --bg-section: #F2C14E;
+    --text-dark: #604F2F;
+    --text-soft: #68534D;
+    --accent-main: #F78154;
+    --accent-secondary: #F2C14E;
+  }
+  
+
+body {
+    font-family: 'Delius';
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 560px;
+    width: 380px;
+}
+
+h1 {
+    text-align: center;
+    color: var(--accent-main);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    max-width: 360px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+th {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+    font-weight: bold;
+}
+
+td {
+    color: var(--text-main);
+    background-color: var(--bg-dark);
+}
+
+tr:nth-child(even) td {
+    background-color: var(--card-bg);
+}
+
+tr:hover td {
+    background-color: var(--accent-secondary);
+    color: var(--card-bg);
+}
+
+td:first-child {
+    font-weight: bold;
+}
+
+td:last-child {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+button {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--accent-secondary);
+}

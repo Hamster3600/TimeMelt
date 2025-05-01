@@ -14,11 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
         let hasData = false; // Flaga, aby sprawdzić, czy są dane do wyświetlenia
         for (const [domain, data] of Object.entries(timeData)) {
             if (data && domain !== "null") { // Ignoruj domeny "null"
-                const time = data.time || 0; // Pobierz czas
+                const timeInMs = data.time || 0; // Pobierz czas w milisekundach
                 const date = data.date || "N/A"; // Pobierz datę
-                console.log(`Adding row for domain: ${domain}, time: ${time}, date: ${date}`);
+
+                // Formatowanie czasu na "Xh Ym"
+                const totalMinutes = Math.floor(timeInMs / (1000 * 60));
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                const formattedTime = `${hours}h ${minutes}m`;
+
+                console.log(`Adding row for domain: ${domain}, time: ${formattedTime}, date: ${date}`);
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${domain}</td><td>${(time / 1000).toFixed(2)}</td><td>${date}</td>`;
+                row.innerHTML = `<td>${domain}</td><td>${formattedTime}</td><td>${date}</td>`;
                 tableBody.appendChild(row);
                 hasData = true;
             }
