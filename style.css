@@ -30,9 +30,9 @@ body {
 
 #seeMoreChart {
     position: absolute;
-    bottom: 10px;
-    right: 15px;
-    font-size: 12px;
+    top: 300px;
+    left: 40px;
+    font-size: 15px;
     color: var(--text-dark);
     text-decoration: none;
 }
@@ -121,10 +121,11 @@ body {
 }
 
 h1 {
+    margin-top: 10px;
     text-align: center;
     color: var(--accent-main);
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 40px;
+    margin-bottom: 10px;
 }
 
 table {
@@ -195,7 +196,7 @@ button:hover {
     background-color: var(--bg-section);
     border-radius: 15px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduced margin-bottom */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;

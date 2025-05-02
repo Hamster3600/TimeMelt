@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!seeMoreChartLink) console.error("Error: seeMoreChartLink element not found");
     if (!timeTable) console.error("Error: timeTable element not found");
 
-
     let timeChart = null;
     let currentTimeData = {}; // Store fetched time data
 
@@ -60,13 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     legend: {
                         display: true,
                         position: 'right', // <- to będzie działać teraz
+                        labels: {
+                            font: {
+                                size: 14 // Increase font size for better readability
+                            }
+                        }
                     },
                     title: {
                         display: false,
                     }
                 }
             }
-            
         });
     }
 
@@ -109,19 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Sort and get top domains (e.g., top 5)
+        // Sort and get top 5 domains
         const sortedDomains = Object.entries(filteredData).sort(([, a], [, b]) => b - a);
         const topDomains = sortedDomains.slice(0, 5); // Get top 5
 
-        const labels = topDomains.map(([domain,]) => domain);
+        const labels = topDomains.map(([domain]) => domain);
         const data = topDomains.map(([, time]) => time);
-
-        // Add "Other" category for remaining time
-        const otherTime = sortedDomains.slice(5).reduce((sum, [, time]) => sum + time, 0);
-        if (otherTime > 0) {
-            labels.push('Other');
-            data.push(otherTime);
-        }
 
         return { data, labels };
     }
@@ -135,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         detailedTimeTableBody.innerHTML = ""; // Clear table before adding data
         let hasData = false;
         for (const [domain, data] of Object.entries(timeData)) {
-             if (data && domain !== "null") {
+            if (data && domain !== "null") {
                 const timeInMs = data.time || 0;
                 const date = data.date || "N/A";
 
@@ -150,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hasData = true;
             }
         }
-         if (!hasData) {
+        if (!hasData) {
             const row = document.createElement('tr');
             row.innerHTML = `<td colspan="3">No data available</td>`;
             detailedTimeTableBody.appendChild(row);
@@ -173,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (detailedView) detailedView.style.display = 'none';
     }
 
-
     // Initial data load and rendering
     chrome.storage.local.get({ timeData: {} }, (result) => {
         currentTimeData = result.timeData;
@@ -183,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const { data, labels } = processTimeDataForChart(currentTimeData, 'D');
         renderChart(data, labels);
 
-        // // Populate the website list using monitored websites
+        // Populate the website list using monitored websites
         // getMonitoredWebsites((monitoredWebsites) => {
         //     populateWebsiteList(currentTimeData, monitoredWebsites);
         // });
@@ -203,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
 
     // Add event listener for Customize List button
     if (customizeListButton) {
@@ -225,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     // Add event listener for "see more..." link in chart section
     if (seeMoreChartLink) {
         seeMoreChartLink.addEventListener('click', (event) => {
@@ -233,23 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showDetailedView();
         });
     }
-
-
-//      // Add event listener for "see more..." link in websites section (still toggles original table)
-//      if (seeMoreWebsitesLink) {
-//         seeMoreWebsitesLink.addEventListener('click', (event) => {
-//             event.preventDefault();
-//             // Toggle visibility of the original detailed table
-//             if (timeTable && timeTable.style.display === 'none') {
-//                 timeTable.style.display = 'table';
-//                 seeMoreWebsitesLink.textContent = 'see less...';
-//             } else if (timeTable) {
-//                 timeTable.style.display = 'none';
-//                 seeMoreWebsitesLink.textContent = 'see more...';
-//             }
-//         });
-//     }
-
 
     // Add event listener for the back button in detailed view
     if (backButton) {
