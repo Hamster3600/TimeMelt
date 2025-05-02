@@ -1,157 +1,117 @@
 let activeDomain = null;
 let startTime = null;
-let intervalId = null; // Zmienna do przechowywania identyfikatora interwału
+let intervalId = null;
 
-// Funkcja do aktualizacji domeny
-function updateActiveDomain(tabId, url) {
-    if (url && url.startsWith("http")) {
-        try {
-            const parsedUrl = new URL(url);
-
-            if (activeDomain !== parsedUrl.hostname) {
-                console.log(`Updating domain. Previous domain: ${activeDomain}`);
-
-                // Zapisz poprzednią domenę przed zmianą
-                saveTimeForCurrentDomain();
-
-                // Zatrzymaj poprzedni interwał
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = null;
-                }
-
-                activeDomain = parsedUrl.hostname;
-                startTime = Date.now();
-
-                console.log(`Updated active domain to: ${activeDomain}`);
-                console.log("New startTime set:", startTime);
-
-                // Uruchom interwał do aktualizacji czasu co 5 sekund
-                intervalId = setInterval(() => {
-                    saveTimeForCurrentDomain();
-                    startTime = Date.now(); // Resetuj startTime po zapisaniu
-                }, 5000);
-            } else {
-                console.log(`Domain has not changed. Current domain: ${activeDomain}`);
-            }
-        } catch (error) {
-            console.error("Error parsing URL:", error);
-        }
-    } else {
-        console.warn("Invalid or unsupported URL:", url);
-
-        // Zapisz czas przed wyzerowaniem danych
-        const previousDomain = activeDomain;
-        saveTimeForCurrentDomain(previousDomain);
-
-        // Zatrzymaj interwał
-        if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-        }
-
-        activeDomain = null;
-        startTime = null;
-    }
-}
-
-// Funkcja do zapisywania czasu dla bieżącej domeny
-function saveTimeForCurrentDomain(domainOverride = null) {
-    const domain = domainOverride || activeDomain;
-    console.log("Checking saveTimeForCurrentDomain:");
-    console.log("domain:", domain);
-    console.log("startTime:", startTime);
-
-    if (domain && startTime) {
+// Function to save time for the current domain
+function saveTimeForCurrentDomain() {
+    if (activeDomain && startTime) {
         const now = Date.now();
         const timeSpent = now - startTime;
 
-        console.log(`Time spent on domain '${domain}': ${timeSpent} ms`);
+        if (timeSpent > 0) {
+            chrome.storage.local.get({ timeData: {} }, (result) => {
+                const timeData = result.timeData || {};
 
-        chrome.storage.local.get({ timeData: {} }, (result) => {
-            const timeData = result.timeData || {};
-            console.log("Current timeData from storage:", timeData);
-
-            if (domain !== "null") {
-                if (timeData.hasOwnProperty(domain)) {
-                    console.log(`Domain '${domain}' already exists in timeData.`);
-                    timeData[domain].time += timeSpent;
-                } else {
-                    console.log(`Domain '${domain}' does not exist in timeData. Initializing.`);
-                    timeData[domain] = {
-                        time: timeSpent,
-                        date: new Date().toLocaleDateString() // Dodaj datę
-                    };
+                if (!timeData[activeDomain]) {
+                    timeData[activeDomain] = { time: 0, date: new Date().toLocaleDateString() };
                 }
 
-                console.log(`Updated time for domain '${domain}': ${timeData[domain].time} ms`);
+                timeData[activeDomain].time += timeSpent;
+                timeData[activeDomain].date = new Date().toLocaleDateString(); // Update date on each save
 
                 chrome.storage.local.set({ timeData }, () => {
                     if (chrome.runtime.lastError) {
                         console.error("Error saving timeData:", chrome.runtime.lastError);
                     } else {
-                        console.log("Time data saved successfully:", timeData);
+                        console.log(`Saved ${timeSpent}ms for ${activeDomain}. Total: ${timeData[activeDomain].time}ms`);
                     }
                 });
-            } else {
-                console.warn("Skipping save for invalid domain:", domain);
-            }
-        });
-    } else {
-        console.warn("No active domain or startTime to save");
+            });
+        }
+        startTime = now; // Reset start time after saving
     }
 }
 
-// Nasłuchiwanie aktywacji zakładek
-chrome.tabs.onActivated.addListener((activeInfo) => {
-    console.log("Tab activated:", activeInfo.tabId);
-
+// Function to handle tab updates and activation
+function handleTabChange(tabId, changeInfo, tab) {
+    // Save time for the previously active domain before changing
     saveTimeForCurrentDomain();
 
-    chrome.tabs.get(activeInfo.tabId, (tab) => {
-        console.log("Tab details:", tab);
-        if (tab && tab.url) {
-            updateActiveDomain(tab.id, tab.url);
-        } else {
-            console.warn("Tab has no valid URL or is not an HTTP/HTTPS page");
-            saveTimeForCurrentDomain();
+    if (tab && tab.url && tab.url.startsWith("http")) {
+        try {
+            const parsedUrl = new URL(tab.url);
+            const newDomain = parsedUrl.hostname;
 
-            // Zatrzymaj interwał
+            if (activeDomain !== newDomain) {
+                activeDomain = newDomain;
+                startTime = Date.now();
+                console.log(`Active domain changed to: ${activeDomain}`);
+
+                // Clear previous interval and start a new one for the new domain
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+                intervalId = setInterval(saveTimeForCurrentDomain, 5000); // Save every 5 seconds
+            }
+        } catch (error) {
+            console.error("Error parsing URL:", error);
+            // If URL is invalid, treat as leaving a valid domain
+            activeDomain = null;
+            startTime = null;
             if (intervalId) {
                 clearInterval(intervalId);
                 intervalId = null;
             }
+        }
+    } else {
+        // If the tab is not an http/https page, treat as leaving a valid domain
+        activeDomain = null;
+        startTime = null;
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    }
+}
 
-            activeDomain = null;
-            startTime = null;
+// Listen for tab activation
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    chrome.tabs.get(activeInfo.tabId, (tab) => {
+        handleTabChange(activeInfo.tabId, null, tab);
+    });
+});
+
+// Listen for tab updates (when a page finishes loading)
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete') {
+         handleTabChange(tabId, changeInfo, tab);
+    }
+});
+
+// Listen for tab removal
+chrome.tabs.onRemoved.addListener((tabId) => {
+    // Save time for the domain that was active before the tab was closed
+    saveTimeForCurrentDomain();
+
+    // If the removed tab was the active one, clear active domain info
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        if (tabs.length === 0 || tabs[0].id !== tabId) {
+             activeDomain = null;
+             startTime = null;
+             if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
         }
     });
 });
 
-// Nasłuchiwanie aktualizacji zakładek — tylko po załadowaniu strony
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete" && tab.url && tab.url.startsWith("http")) {
-        console.log("Tab fully loaded:", tabId, "URL:", tab.url);
-        updateActiveDomain(tabId, tab.url);
+// Initial setup when the extension starts
+chrome.windows.getLastFocused({}, (window) => {
+    if (window && window.tabs) {
+        const activeTab = window.tabs.find(tab => tab.active);
+        if (activeTab) {
+            handleTabChange(activeTab.id, null, activeTab);
+        }
     }
-});
-
-// Nasłuchiwanie zamykania zakładek
-chrome.tabs.onRemoved.addListener((tabId) => {
-    console.log("Tab removed:", tabId);
-
-    saveTimeForCurrentDomain();
-
-    if (activeDomain && startTime) {
-        saveTimeForCurrentDomain();
-    }
-
-    // Zatrzymaj interwał
-    if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
-    }
-
-    activeDomain = null;
-    startTime = null;
 });

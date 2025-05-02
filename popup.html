@@ -6,7 +6,28 @@
 </head>
 <body>
     <h1>TimeMelt</h1>
-    <table id="timeTable">
+
+    <div class="chart-section">
+        <div class="time-toggles">
+            <button id="toggleDay">D</button>
+            <button id="toggleWeek">W</button>
+            <button id="toggleMonth">M</button>
+            <button id="toggleYear">Y</button>
+        </div>
+        <canvas id="timeChart"></canvas>
+        <a href="#" id="seeMoreChart">see more...</a>
+    </div>    
+
+    <div class="websites-section">
+        <h2>List of time-wasting websites:</h2>
+        <ul id="websiteList">
+            <!-- Website list items will be added here -->
+        </ul>
+        <button id="customizeList">Customize list</button>
+        <a href="#" id="seeMoreWebsites">see more...</a>
+    </div>
+
+    <table id="timeTable" style="display: none;">
         <thead>
             <tr>
                 <th>Website</th>
@@ -18,6 +39,25 @@
             <!-- Wiersze będą dodawane tutaj -->
         </tbody>
     </table>
+
+    <div id="detailedView" style="display: none;">
+        <h2>Detailed Time Data</h2>
+        <button id="backButton">Back</button>
+        <table id="detailedTimeTable">
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Time Spent (s)</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Detailed rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
     <script src="popup.js"></script>
+    <script src="./libs/chart.umd.js"></script>
 </body>
 </html>

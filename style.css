@@ -5,8 +5,14 @@
     --text-soft: #68534D;
     --accent-main: #F78154;
     --accent-secondary: #F2C14E;
-  }
-  
+
+    /* DODAJ TO ↓↓↓↓↓↓↓ */
+    --card-bg: #FFFFFF;
+    --bg-dark: #FFF5E1;
+    --text-main: #333333;
+    --text-muted: #999999;
+}
+
 
 body {
     font-family: 'Delius';
@@ -19,6 +25,99 @@ body {
     align-items: center;
     height: 560px;
     width: 380px;
+    overflow: hidden;
+}
+
+#seeMoreChart {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    font-size: 12px;
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+#detailedView {
+    width: 100%;
+    max-width: 360px;
+    background-color: var(--bg-section);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#detailedView h2 {
+    color: var(--text-dark);
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+#backButton {
+    background-color: var(--accent-secondary);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 25px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+#backButton:hover {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+}
+
+#detailedTimeTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#detailedTimeTable th, #detailedTimeTable td {
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+}
+
+#detailedTimeTable th {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+    font-weight: bold;
+}
+
+#detailedTimeTable td {
+    color: var(--text-main);
+    background-color: var(--bg-dark);
+}
+
+#detailedTimeTable tr:nth-child(even) td {
+    background-color: var(--card-bg);
+}
+
+#detailedTimeTable tr:hover td {
+    background-color: var(--accent-secondary);
+    color: var(--card-bg);
+}
+
+#detailedTimeTable td:first-child {
+    font-weight: bold;
+}
+
+#detailedTimeTable td:last-child {
+    color: var(--text-muted);
+    font-style: italic;
 }
 
 h1 {
@@ -88,4 +187,94 @@ button {
 
 button:hover {
     background-color: var(--accent-secondary);
+}
+
+.chart-section, .websites-section {
+    width: 100%;
+    max-width: 360px;
+    background-color: var(--bg-section);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    height: 280px;
+}
+
+.time-toggles {
+    display: flex;
+    justify-content: center;
+}
+
+.time-toggles button {
+    background-color: var(--accent-secondary);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.time-toggles button:hover {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+}
+
+#timeChart {
+    width: 100% !important;
+    max-width: 300px !important;
+    height: auto !important; /* Ensure height is auto */
+}
+
+.websites-section h2 {
+    color: var(--text-dark);
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+#websiteList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    width: 100%;
+}
+
+#websiteList li {
+    background-color: var(--bg-main);
+    color: var(--text-soft);
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+#websiteList li span {
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.websites-section button {
+    margin-bottom: 10px;
+}
+
+.chart-section a, .websites-section a {
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 12px;
+    margin-top: 5px;
+    height: 270px;
+}
+
+.chart-section a:hover, .websites-section a:hover {
+    text-decoration: underline;
 }
