@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         position: 'right', // <- to będzie działać teraz
                         labels: {
                             font: {
-                                size: 14 // Increase font size for better readability
+                                size: 13 // Increase font size for better readability
                             }
                         }
                     },
@@ -75,83 +75,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to process time data for the chart based on period
     function processTimeDataForChart(timeData, period) {
-        const now = Date.now();
+        const now = new Date();
         let filteredData = {};
-
-        for (const [domain, data] of Object.entries(timeData)) {
-            if (data && domain !== "null" && data.date) {
-                const itemDate = new Date(data.date);
+    
+        for (const [domain, dates] of Object.entries(timeData)) {
+            if (domain === "null") continue;
+    
+            for (const [dateStr, { time }] of Object.entries(dates)) {
+                const entryDate = new Date(dateStr);
                 let include = false;
-
+    
                 switch (period) {
-                    case 'D': // Day
-                        include = itemDate.toDateString() === new Date(now).toDateString();
+                    case 'D':
+                        include = entryDate.toDateString() === now.toDateString();
                         break;
-                    case 'W': // Week
+                    case 'W':
                         const startOfWeek = new Date(now);
-                        startOfWeek.setDate(now.getDate() - now.getDay()); // Start of current week (Sunday)
-                        include = itemDate >= startOfWeek;
+                        startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+                        include = entryDate >= startOfWeek;
                         break;
-                    case 'M': // Month
-                        include = itemDate.getMonth() === new Date(now).getMonth() && itemDate.getFullYear() === new Date(now).getFullYear();
+                    case 'M':
+                        include = entryDate.getMonth() === now.getMonth() &&
+                                  entryDate.getFullYear() === now.getFullYear();
                         break;
-                    case 'Y': // Year
-                        include = itemDate.getFullYear() === new Date(now).getFullYear();
+                    case 'Y':
+                        include = entryDate.getFullYear() === now.getFullYear();
                         break;
-                    default: // Default to Day
-                        include = itemDate.toDateString() === new Date(now).toDateString();
                 }
-
+    
                 if (include) {
-                    if (filteredData[domain]) {
-                        filteredData[domain] += data.time;
-                    } else {
-                        filteredData[domain] = data.time;
+                    if (!filteredData[domain]) {
+                        filteredData[domain] = 0;
                     }
+                    filteredData[domain] += time;
                 }
             }
         }
-
-        // Sort and get top 5 domains
+    
         const sortedDomains = Object.entries(filteredData).sort(([, a], [, b]) => b - a);
-        const topDomains = sortedDomains.slice(0, 5); // Get top 5
-
+        const topDomains = sortedDomains.slice(0, 5);
         const labels = topDomains.map(([domain]) => domain);
         const data = topDomains.map(([, time]) => time);
-
+    
         return { data, labels };
     }
-
+    
     // Function to populate the detailed time table
     function populateDetailedTable(timeData) {
         if (!detailedTimeTableBody) {
             console.error("Cannot populate detailed table: detailedTimeTableBody not found.");
             return;
         }
-        detailedTimeTableBody.innerHTML = ""; // Clear table before adding data
+    
+        detailedTimeTableBody.innerHTML = "";
         let hasData = false;
-        for (const [domain, data] of Object.entries(timeData)) {
-            if (data && domain !== "null") {
-                const timeInMs = data.time || 0;
-                const date = data.date || "N/A";
-
-                const totalMinutes = Math.floor(timeInMs / (1000 * 60));
+    
+        for (const [domain, dateEntries] of Object.entries(timeData)) {
+            if (domain === "null") continue;
+    
+            for (const [date, { time }] of Object.entries(dateEntries)) {
+                const totalMinutes = Math.floor(time / (1000 * 60));
                 const hours = Math.floor(totalMinutes / 60);
                 const minutes = totalMinutes % 60;
                 const formattedTime = `${hours}h ${minutes}m`;
-
+    
                 const row = document.createElement('tr');
                 row.innerHTML = `<td>${domain}</td><td>${formattedTime}</td><td>${date}</td>`;
                 detailedTimeTableBody.appendChild(row);
                 hasData = true;
             }
         }
+    
         if (!hasData) {
             const row = document.createElement('tr');
             row.innerHTML = `<td colspan="3">No data available</td>`;
             detailedTimeTableBody.appendChild(row);
         }
     }
+    
 
     // Function to show the detailed view
     function showDetailedView() {
@@ -164,10 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show the main view
     function showMainView() {
-        if (document.querySelector('.chart-section')) document.querySelector('.chart-section').style.display = 'block';
-        if (document.querySelector('.websites-section')) document.querySelector('.websites-section').style.display = 'block';
+        const chartSection = document.querySelector('.chart-section');
+        const websitesSection = document.querySelector('.websites-section');
+    
+        if (chartSection) chartSection.style.display = 'block';
+        if (websitesSection) websitesSection.style.display = 'block';
         if (detailedView) detailedView.style.display = 'none';
     }
+    
 
     // Initial data load and rendering
     chrome.storage.local.get({ timeData: {} }, (result) => {
@@ -193,8 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', (event) => {
                 const period = event.target.id.replace('toggle', '');
                 console.log("Time period toggled:", period);
+        
                 const { data, labels } = processTimeDataForChart(currentTimeData, period);
                 renderChart(data, labels);
+        
+                // 🛠 Przywróć widok główny jeśli był ukryty
+                showMainView();
             });
         });
     }

@@ -228,7 +228,7 @@ button:hover {
 }
 
 #timeChart {
-    width: 100% !important;
+    width: 400px !important;
     max-width: 300px !important;
     height: auto !important; /* Ensure height is auto */
 }

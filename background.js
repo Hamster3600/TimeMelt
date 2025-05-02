@@ -11,26 +11,34 @@ function saveTimeForCurrentDomain() {
         if (timeSpent > 0) {
             chrome.storage.local.get({ timeData: {} }, (result) => {
                 const timeData = result.timeData || {};
+                const today = new Date().toLocaleDateString(); // "05/02/2025"
 
+                // Upewnij się, że domena istnieje
                 if (!timeData[activeDomain]) {
-                    timeData[activeDomain] = { time: 0, date: new Date().toLocaleDateString() };
+                    timeData[activeDomain] = {};
                 }
 
-                timeData[activeDomain].time += timeSpent;
-                timeData[activeDomain].date = new Date().toLocaleDateString(); // Update date on each save
+                // Upewnij się, że wpis dla dzisiejszej daty istnieje
+                if (!timeData[activeDomain][today]) {
+                    timeData[activeDomain][today] = { time: 0 };
+                }
+
+                // Dodaj czas
+                timeData[activeDomain][today].time += timeSpent;
 
                 chrome.storage.local.set({ timeData }, () => {
                     if (chrome.runtime.lastError) {
                         console.error("Error saving timeData:", chrome.runtime.lastError);
                     } else {
-                        console.log(`Saved ${timeSpent}ms for ${activeDomain}. Total: ${timeData[activeDomain].time}ms`);
+                        console.log(`Saved ${timeSpent}ms for ${activeDomain} on ${today}. Total: ${timeData[activeDomain][today].time}ms`);
                     }
                 });
             });
         }
-        startTime = now; // Reset start time after saving
+        startTime = now; // Reset start time
     }
 }
+
 
 // Function to handle tab updates and activation
 function handleTabChange(tabId, changeInfo, tab) {
