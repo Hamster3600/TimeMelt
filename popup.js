@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    // Wymuś ponownie zastosowanie klas centrowania
+    timeChartCanvas.parentElement.classList.add('chart-section'); 
+
 
     // Function to process time data for the chart based on period
     function processTimeDataForChart(timeData, period) {
@@ -168,8 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const chartSection = document.querySelector('.chart-section');
         const websitesSection = document.querySelector('.websites-section');
     
-        if (chartSection) chartSection.style.display = 'block';
-        if (websitesSection) websitesSection.style.display = 'block';
+        if (chartSection) chartSection.style.display = 'flex';
+        if (websitesSection) websitesSection.style.display = 'flex';
         if (detailedView) detailedView.style.display = 'none';
     }
     
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (timePeriodToggles) {
         timePeriodToggles.forEach(button => {
             button.addEventListener('click', (event) => {
-                const period = event.target.id.replace('toggle', '');
+                const period = event.target.id;
                 console.log("Time period toggled:", period);
         
                 const { data, labels } = processTimeDataForChart(currentTimeData, period);

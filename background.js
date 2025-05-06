@@ -11,7 +11,7 @@ function saveTimeForCurrentDomain() {
         if (timeSpent > 0) {
             chrome.storage.local.get({ timeData: {} }, (result) => {
                 const timeData = result.timeData || {};
-                const today = new Date().toLocaleDateString(); // "05/02/2025"
+                const today = new Date().toISOString().split("T")[0]; // "2025-05-02"
 
                 // Upewnij się, że domena istnieje
                 if (!timeData[activeDomain]) {
