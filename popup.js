@@ -255,25 +255,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add event listener for Customize List button
-    if (customizeListButton) {
-        customizeListButton.addEventListener('click', () => {
-            const website = prompt("Enter a website domain to monitor (e.g., youtube.com):");
-            if (website) {
-                getMonitoredWebsites((monitoredWebsites) => {
-                    if (!monitoredWebsites.includes(website)) {
-                        monitoredWebsites.push(website);
-                        saveMonitoredWebsites(monitoredWebsites, () => {
-                            populateWebsiteList(currentTimeData, monitoredWebsites);
-                            alert(`${website} added to monitored list.`);
-                        });
-                    } else {
-                        alert(`${website} is already in the monitored list.`);
-                    }
-                });
-            }
-        });
-    }
+    // // Add event listener for Customize List button
+    // if (customizeListButton) {
+    //     customizeListButton.addEventListener('click', () => {
+    //         const website = prompt("Enter a website domain to monitor (e.g., youtube.com):");
+    //         if (website) {
+    //             getMonitoredWebsites((monitoredWebsites) => {
+    //                 if (!monitoredWebsites.includes(website)) {
+    //                     monitoredWebsites.push(website);
+    //                     saveMonitoredWebsites(monitoredWebsites, () => {
+    //                         populateWebsiteList(currentTimeData, monitoredWebsites);
+    //                         alert(`${website} added to monitored list.`);
+    //                     });
+    //                 } else {
+    //                     alert(`${website} is already in the monitored list.`);
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
 
     // Add event listener for "see more..." link in chart section
     if (seeMoreChartLink) {
