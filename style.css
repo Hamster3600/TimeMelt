@@ -227,6 +227,29 @@ button:hover {
     color: var(--card-bg);
 }
 
+.time-toggles-detailed {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px; /* Add some space below the toggles */
+}
+
+.time-toggles-detailed button {
+    background-color: var(--accent-secondary);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.time-toggles-detailed button:hover {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+}
+
 #timeChart {
     width: 400px !important;
     max-width: 300px !important;

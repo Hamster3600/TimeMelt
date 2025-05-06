@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'right', // <- to będzie działać teraz
+                        position: 'right',
                         labels: {
                             font: {
                                 size: 13 // Increase font size for better readability
@@ -122,6 +122,48 @@ document.addEventListener('DOMContentLoaded', () => {
     
         return { data, labels };
     }
+
+    // Function to process time data for the detailed table based on period
+    function processTimeDataForDetailedTable(timeData, period) {
+        const now = new Date();
+        let filteredData = {};
+
+        for (const [domain, dates] of Object.entries(timeData)) {
+            if (domain === "null") continue;
+
+            for (const [dateStr, { time }] of Object.entries(dates)) {
+                const entryDate = new Date(dateStr);
+                let include = false;
+
+                switch (period) {
+                    case 'D':
+                        include = entryDate.toDateString() === now.toDateString();
+                        break;
+                    case 'W':
+                        const startOfWeek = new Date(now);
+                        startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+                        include = entryDate >= startOfWeek;
+                        break;
+                    case 'M':
+                        include = entryDate.getMonth() === now.getMonth() &&
+                                  entryDate.getFullYear() === now.getFullYear();
+                        break;
+                    case 'Y':
+                        include = entryDate.getFullYear() === now.getFullYear();
+                        break;
+                }
+
+                if (include) {
+                    if (!filteredData[domain]) {
+                        filteredData[domain] = {};
+                    }
+                    filteredData[domain][dateStr] = { time: time };
+                }
+            }
+        }
+        return filteredData;
+    }
+
     
     // Function to populate the detailed time table
     function populateDetailedTable(timeData) {
@@ -163,7 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.querySelector('.websites-section')) document.querySelector('.websites-section').style.display = 'none';
         if (timeTable) timeTable.style.display = 'none'; // Hide the original table
         if (detailedView) detailedView.style.display = 'block';
-        populateDetailedTable(currentTimeData); // Populate detailed table when showing
+        // Populate detailed table with default period (Day) data when showing
+        const filteredDetailedData = processTimeDataForDetailedTable(currentTimeData, 'D');
+        populateDetailedTable(filteredDetailedData);
     }
 
     // Function to show the main view
@@ -246,4 +290,18 @@ document.addEventListener('DOMContentLoaded', () => {
             showMainView();
         });
     }
+        // Add event listeners to detailed view time period toggles
+        const detailedTimePeriodToggles = document.querySelectorAll('.time-toggles-detailed button');
+        if (detailedTimePeriodToggles) {
+            detailedTimePeriodToggles.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const period = event.target.id.replace('-detailed', ''); // Get period (D, W, M, Y)
+                    console.log("Detailed view time period toggled:", period);
+    
+                    const filteredDetailedData = processTimeDataForDetailedTable(currentTimeData, period);
+                    populateDetailedTable(filteredDetailedData);
+                });
+            });
+        }
+    
 });
