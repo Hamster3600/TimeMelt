@@ -93,8 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         include = entryDate.toDateString() === now.toDateString();
                         break;
                     case 'W':
+                        const day = now.getDay();
                         const startOfWeek = new Date(now);
-                        startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+                        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+                        startOfWeek.setDate(diff);
+                        startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
                         break;
                     case 'M':
@@ -140,8 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         include = entryDate.toDateString() === now.toDateString();
                         break;
                     case 'W':
+                        const day = now.getDay();
                         const startOfWeek = new Date(now);
-                        startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+                        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+                        startOfWeek.setDate(diff);
+                        startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
                         break;
                     case 'M':
