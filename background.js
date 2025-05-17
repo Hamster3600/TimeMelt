@@ -70,9 +70,10 @@ function addDomainToBlockedList(newDomain) {
 
 // Function to save time for the current domain
 function saveTimeForCurrentDomain() {
-    if (activeDomain && startTime) {
+    let nowTab = activeDomain;
+    if (nowTab && startTime) {
         // Sprawdzamy, czy domena jest na liście zablokowanych
-        isDomainBlocked(activeDomain, (blocked) => {
+        isDomainBlocked(nowTab, (blocked) => {
             if (blocked) { // Zapisujemy czas tylko, jeśli domena jest zablokowana
                 const now = Date.now();
                 const timeSpent = now - startTime;
@@ -83,30 +84,30 @@ function saveTimeForCurrentDomain() {
                         const today = new Date().toISOString().split("T")[0]; // "2025-05-02"
 
                         // Upewnij się, że domena istnieje
-                        if (!timeData[activeDomain]) {
-                            timeData[activeDomain] = {};
+                        if (!timeData[nowTab]) {
+                            timeData[nowTab] = {};
                         }
 
                         // Upewnij się, że wpis dla dzisiejszej daty istnieje
-                        if (!timeData[activeDomain][today]) {
-                            timeData[activeDomain][today] = { time: 0 };
+                        if (!timeData[nowTab][today]) {
+                            timeData[nowTab][today] = { time: 0 };
                         }
 
                         // Dodaj czas
-                        timeData[activeDomain][today].time += timeSpent;
+                        timeData[nowTab][today].time += timeSpent;
 
                         chrome.storage.local.set({ timeData }, () => {
                             if (chrome.runtime.lastError) {
                                 console.error("Error saving timeData:", chrome.runtime.lastError);
                             } else {
-                                console.log(`Saved ${timeSpent}ms for ${activeDomain} on ${today}. Total: ${timeData[activeDomain][today].time}ms`);
+                                console.log(`Saved ${timeSpent}ms for ${nowTab} on ${today}. Total: ${timeData[nowTab][today].time}ms`);
                             }
                         });
                     });
                 }
                 startTime = now; // Reset start time
             } else {
-                console.log(`Domain ${activeDomain} is not on the blocked list. Skipping time save.`);
+                console.log(`Domain ${nowTab} is not on the blocked list. Skipping time save.`);
                 console.log("Cached domain list:", cachedDomainList);
             }
         });
@@ -118,11 +119,12 @@ function saveTimeForCurrentDomain() {
 // Function to handle tab updates and activation
 function handleTabChange(tabId, changeInfo, tab) {
     // Save time for the previously active domain before changing
+    let nowTab = tab;
     saveTimeForCurrentDomain();
 
-    if (tab && tab.url && tab.url.startsWith("http")) {
+    if (nowTab && nowTab.url && nowTab.url.startsWith("http")) {
         try {
-            const parsedUrl = new URL(tab.url);
+            const parsedUrl = new URL(nowTab.url);
             const newDomain = parsedUrl.hostname;
 
             if (activeDomain !== newDomain) {
