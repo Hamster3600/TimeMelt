@@ -23,6 +23,65 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeChart = null;
     let currentTimeData = {}; // Store fetched time data
 
+    // Function to get the list of monitored websites from storage
+    function getMonitoredWebsites(callback) {
+        chrome.storage.local.get(["TimeWastingDomains"], (result) => {
+            if (chrome.runtime.lastError) {
+                console.error("Storage error:", chrome.runtime.lastError);
+                callback([]); // Return empty array on error
+                return;
+            }
+            callback(result.TimeWastingDomains || []); // Return the list or an empty array
+        });
+    }
+
+    // Function to save the list of monitored websites to storage
+    function saveMonitoredWebsites(monitoredWebsites, callback) {
+        chrome.storage.local.set({ TimeWastingDomains: monitoredWebsites }, () => {
+            if (chrome.runtime.lastError) {
+                console.error("Error saving monitored domains:", chrome.runtime.lastError);
+            } else {
+                console.log("Monitored domains saved:", monitoredWebsites);
+                if (callback) callback();
+            }
+        });
+    }
+
+    // Function to populate the website list in the popup
+    function populateWebsiteList(timeData, monitoredWebsites) {
+        if (!websiteListUl) {
+            console.error("Cannot populate website list: websiteListUl not found.");
+            return;
+        }
+
+        websiteListUl.innerHTML = ""; // Clear existing list items
+
+        if (monitoredWebsites.length === 0) {
+            const listItem = document.createElement('li');
+            listItem.textContent = "No websites being monitored.";
+            websiteListUl.appendChild(listItem);
+            return;
+        }
+
+        monitoredWebsites.forEach(website => {
+            let totalTime = 0;
+            if (timeData[website]) {
+                for (const date in timeData[website]) {
+                    totalTime += timeData[website][date].time;
+                }
+            }
+
+            const totalMinutes = Math.floor(totalTime / (1000 * 60));
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            const formattedTime = `${hours}h ${minutes}m`;
+
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<strong>${website}</strong>: ${formattedTime}`;
+            websiteListUl.appendChild(listItem);
+        });
+    }
+
     // Function to render the pie chart
     function renderChart(data, labels) {
         if (!timeChartCanvas) {
@@ -237,9 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
         renderChart(data, labels);
 
         // Populate the website list using monitored websites
-        // getMonitoredWebsites((monitoredWebsites) => {
-        //     populateWebsiteList(currentTimeData, monitoredWebsites);
-        // });
+        getMonitoredWebsites((monitoredWebsites) => {
+            populateWebsiteList(currentTimeData, monitoredWebsites);
+        });
 
         // Populate the detailed table (initially hidden) - This is now handled when showing the detailed view
         // populateDetailedTable(currentTimeData);
@@ -261,25 +320,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // // Add event listener for Customize List button
-    // if (customizeListButton) {
-    //     customizeListButton.addEventListener('click', () => {
-    //         const website = prompt("Enter a website domain to monitor (e.g., youtube.com):");
-    //         if (website) {
-    //             getMonitoredWebsites((monitoredWebsites) => {
-    //                 if (!monitoredWebsites.includes(website)) {
-    //                     monitoredWebsites.push(website);
-    //                     saveMonitoredWebsites(monitoredWebsites, () => {
-    //                         populateWebsiteList(currentTimeData, monitoredWebsites);
-    //                         alert(`${website} added to monitored list.`);
-    //                     });
-    //                 } else {
-    //                     alert(`${website} is already in the monitored list.`);
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
+    // Add event listener for Customize List button
+    if (customizeListButton) {
+        customizeListButton.addEventListener('click', () => {
+            const website = prompt("Enter a website domain to monitor (e.g., youtube.com):");
+            if (website) {
+                getMonitoredWebsites((monitoredWebsites) => {
+                    if (!monitoredWebsites.includes(website)) {
+                        monitoredWebsites.push(website);
+                        saveMonitoredWebsites(monitoredWebsites, () => {
+                            populateWebsiteList(currentTimeData, monitoredWebsites);
+                            alert(`${website} added to monitored list.`);
+                        });
+                    } else {
+                        alert(`${website} is already in the monitored list.`);
+                    }
+                });
+            }
+        });
+    }
 
     // Add event listener for "see more..." link in chart section
     if (seeMoreChartLink) {
@@ -311,3 +370,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     
 });
+

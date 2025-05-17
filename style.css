@@ -33,6 +33,7 @@ body {
     top: 300px;
     left: 40px;
     font-size: 15px;
+    height: 25px !important;
     color: var(--text-dark);
     text-decoration: none;
 }
