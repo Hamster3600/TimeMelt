@@ -58,6 +58,26 @@ body {
     margin-bottom: 15px;
 }
 
+#detailedViewWebsites {
+    width: 100%;
+    max-width: 360px;
+    background-color: var(--bg-section);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#detailedViewWebsites h2 {
+    color: var(--text-dark);
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
 #backButton {
     background-color: var(--accent-secondary);
     color: var(--text-dark);
@@ -107,10 +127,6 @@ body {
     background-color: var(--card-bg);
 }
 
-#detailedTimeTable tr:hover td {
-    background-color: var(--accent-secondary);
-    color: var(--card-bg);
-}
 
 #detailedTimeTable td:first-child {
     font-weight: bold;
@@ -119,6 +135,51 @@ body {
 #detailedTimeTable td:last-child {
     color: var(--text-muted);
     font-style: italic;
+}
+
+#CustomizeWebsitesTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#CustomizeWebsitesTable th, #CustomizeWebsitesTable td {
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+}
+
+#CustomizeWebsitesTable th {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+    font-weight: bold;
+}
+
+#CustomizeWebsitesTable td {
+    color: var(--text-main) !important;
+    background-color: var(--bg-dark);
+}
+
+#CustomizeWebsitesTable tr:nth-child(even) td {
+    background-color: var(--card-bg);
+}
+
+
+#CustomizeWebsitesTable td:first-child {
+    font-weight: bold;
+}
+
+#CustomizeWebsitesTable td:last-child {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+#backButtonWebsites{
+    margin-bottom: 10px !important;
 }
 
 h1 {

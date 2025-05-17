@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     var seeMoreChartLink = document.getElementById('seeMoreChart');
     var timeTable = document.getElementById('timeTable'); // Added timeTable variable
 
+    var detailedViewWebsites = document.getElementById('detailedViewWebsites');
+    var backButtonWebsites = document.getElementById('backButtonWebsites');
+    var CustomizeWebsitesTable = document.getElementById('CustomizeWebsitesTable');
+
     // Check if elements are found
     if (!timeChartCanvas) console.error("Error: timeChartCanvas element not found");
     if (!timePeriodToggles.length) console.error("Error: timePeriodToggles elements not found");
@@ -49,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to populate the website list in the popup
     function populateWebsiteList(timeData, monitoredWebsites) {
+        let countOfWebsites = monitoredWebsites.length;
+
         if (!websiteListUl) {
             console.error("Cannot populate website list: websiteListUl not found.");
             return;
@@ -63,24 +69,35 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        monitoredWebsites.forEach(website => {
+        // Oblicz czas całkowity dla każdej domeny
+        const websiteTimePairs = monitoredWebsites.map(website => {
             let totalTime = 0;
             if (timeData[website]) {
                 for (const date in timeData[website]) {
                     totalTime += timeData[website][date].time;
                 }
             }
+            return { website, totalTime };
+        });
 
+        // Posortuj malejąco po czasie i wybierz top 4
+        const topWebsites = websiteTimePairs
+            .sort((a, b) => b.totalTime - a.totalTime)
+            .slice(0, 3);
+
+        // Renderuj tylko top 4 strony
+        topWebsites.forEach(({ website, totalTime }) => {
             const totalMinutes = Math.floor(totalTime / (1000 * 60));
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
             const formattedTime = `${hours}h ${minutes}m`;
 
             const listItem = document.createElement('li');
-            listItem.innerHTML = `<strong>${website}</strong>: ${formattedTime}`;
+            listItem.innerHTML = `<strong>${website}</strong> ${formattedTime}`;
             websiteListUl.appendChild(listItem);
         });
     }
+
 
     // Function to render the pie chart
     function renderChart(data, labels) {
@@ -262,7 +279,34 @@ document.addEventListener('DOMContentLoaded', () => {
             detailedTimeTableBody.appendChild(row);
         }
     }
-    
+
+    function populateDetailedTableWebsites(monitoredWebsites) {
+        if (!CustomizeWebsitesTable) {
+            console.error("Cannot populate customize websites table: CustomizeWebsitesTable not found.");
+            return;
+        }
+
+        const tbody = CustomizeWebsitesTable.querySelector('tbody');
+        if (!tbody) {
+            console.error("Cannot populate customize websites table: tbody not found.");
+            return;
+        }
+
+        tbody.innerHTML = ""; // Clear existing table rows
+
+        if (monitoredWebsites.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="1">No websites being monitored.</td>`;
+            tbody.appendChild(row);
+            return;
+        }
+
+        monitoredWebsites.forEach(website => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${website}</td>`; // Only display the website for customization
+            tbody.appendChild(row);
+        });
+    }
 
     // Function to show the detailed view
     function showDetailedView() {
@@ -275,6 +319,18 @@ document.addEventListener('DOMContentLoaded', () => {
         populateDetailedTable(filteredDetailedData);
     }
 
+    function showDetailedViewWebsites(){
+        if (document.querySelector('.chart-section')) document.querySelector('.chart-section').style.display = 'none';
+        if (document.querySelector('.websites-section')) document.querySelector('.websites-section').style.display = 'none';
+        if (timeTable) timeTable.style.display = 'none'; // Hide the original table
+        if (detailedView) detailedView.style.display = 'none'; // Hide detailed time view
+        if (detailedViewWebsites) detailedViewWebsites.style.display = 'block';
+
+        getMonitoredWebsites((monitoredWebsites) => {
+            populateDetailedTableWebsites(monitoredWebsites);
+        });
+    }
+
     // Function to show the main view
     function showMainView() {
         const chartSection = document.querySelector('.chart-section');
@@ -283,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (chartSection) chartSection.style.display = 'flex';
         if (websitesSection) websitesSection.style.display = 'flex';
         if (detailedView) detailedView.style.display = 'none';
+        if (detailedViewWebsites) detailedViewWebsites.style.display = 'none';
     }
     
 
@@ -323,20 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener for Customize List button
     if (customizeListButton) {
         customizeListButton.addEventListener('click', () => {
-            const website = prompt("Enter a website domain to monitor (e.g., youtube.com):");
-            if (website) {
-                getMonitoredWebsites((monitoredWebsites) => {
-                    if (!monitoredWebsites.includes(website)) {
-                        monitoredWebsites.push(website);
-                        saveMonitoredWebsites(monitoredWebsites, () => {
-                            populateWebsiteList(currentTimeData, monitoredWebsites);
-                            alert(`${website} added to monitored list.`);
-                        });
-                    } else {
-                        alert(`${website} is already in the monitored list.`);
-                    }
-                });
-            }
+            showDetailedViewWebsites();
         });
     }
 
@@ -355,19 +399,39 @@ document.addEventListener('DOMContentLoaded', () => {
             showMainView();
         });
     }
-        // Add event listeners to detailed view time period toggles
-        const detailedTimePeriodToggles = document.querySelectorAll('.time-toggles-detailed button');
-        if (detailedTimePeriodToggles) {
-            detailedTimePeriodToggles.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const period = event.target.id.replace('-detailed', ''); // Get period (D, W, M, Y)
-                    console.log("Detailed view time period toggled:", period);
-    
-                    const filteredDetailedData = processTimeDataForDetailedTable(currentTimeData, period);
-                    populateDetailedTable(filteredDetailedData);
-                });
+
+    if(backButtonWebsites){
+        backButtonWebsites.addEventListener('click', (event)=> {
+            event.preventDefault();
+            showMainView();
+        });
+    }
+
+    // Add event listeners to detailed view time period toggles
+    const detailedTimePeriodToggles = document.querySelectorAll('.time-toggles-detailed button');
+    if (detailedTimePeriodToggles) {
+        detailedTimePeriodToggles.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const period = event.target.id.replace('-detailed', ''); // Get period (D, W, M, Y)
+                console.log("Detailed view time period toggled:", period);
+
+                const filteredDetailedData = processTimeDataForDetailedTable(currentTimeData, period);
+                populateDetailedTable(filteredDetailedData);
+            });
+        });
+    }
+});
+
+// Listen for changes in storage and update the displayed list if the customize view is open
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace === 'local' && changes.TimeWastingDomains) {
+        console.log("TimeWastingDomains changed in storage. Updating customize websites list.");
+        // Check if the detailedViewWebsites is currently displayed
+        if (detailedViewWebsites && detailedViewWebsites.style.display !== 'none') {
+            getMonitoredWebsites((monitoredWebsites) => {
+                populateDetailedTableWebsites(monitoredWebsites);
             });
         }
-    
+    }
 });
 
