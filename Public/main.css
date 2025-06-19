@@ -1,0 +1,150 @@
+/* --- Zdefiniowane kolory TimeMelt --- */
+:root {
+    --color-background-main: #D4C7AE; /* Ciepły beż / piaskowy (jak główny background na screenie) */
+    --color-panel-background: #F4F0E6; /* Jaśniejszy beż / bardzo jasny szary (jak tło pop-upu) */
+    --color-text-dark: #5C574F; /* Ciemny brąz / grafitowy (jak główny tekst) */
+    --color-accent-brown: #8C7866; /* Ciemny, ciepły brąz (jak paski w tle i nagłówki) */
+    --color-button-primary: #C89E39; /* Złoty / musztardowy (jak zaznaczony przycisk na screenie) */
+    --color-button-secondary: #454A53; /* Ciemny grafitowy (jak niezaznaczone przyciski) */
+    --color-light-gray: #C3C3C3; /* Jasny szary (jak jeden z wykresów) */
+    --color-white: #FFFFFF;
+}
+
+/* --- Globalne style --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Bardziej nowoczesna czcionka, ale nadal czytelna */
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background-main); /* Główne tło */
+    color: var(--color-text-dark);
+    display: flex; /* Używamy flexbox do centrowania */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Zapewnia, że strona zajmuje całą wysokość widoku */
+    position: relative; /* Dla pozycjonowania tła z falą */
+    overflow-x: hidden; /* Zapobiega poziomemu scrollowaniu */
+}
+
+/* --- Tło z falą (jak na screenie) --- */
+.background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-accent-brown); /* Kolor fali */
+    transform: skewY(-10deg); /* Kąt podobny do zdjęcia */
+    transform-origin: top left;
+    z-index: -1; /* Umieszcza pod zawartością */
+    opacity: 0.8; /* Lekka przezroczystość */
+}
+
+/* Możesz dodać więcej divów .background-pattern i dostosować transformacje,
+   aby uzyskać bardziej złożony wzór fali, jak na zrzucie ekranu.
+   Na przykład:
+.background-pattern:nth-of-type(2) {
+    background-color: #7A695C;
+    transform: skewY(5deg);
+    top: 50%;
+    left: -20%;
+    height: 70%;
+    width: 120%;
+    z-index: -2;
+    opacity: 0.7;
+}
+*/
+
+
+/* --- Główny kontener --- */
+.container {
+    max-width: 800px;
+    margin: 40px auto; /* Większe marginesy */
+    background: var(--color-panel-background);
+    padding: 40px 50px; /* Większy padding */
+    border-radius: 12px; /* Większe zaokrąglenia */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Subtelniejszy, ale wyraźniejszy cień */
+    position: relative;
+    z-index: 1; /* Upewnia się, że jest nad tłem */
+}
+
+/* --- Nagłówki --- */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(var(--color-text-dark), 0.1); /* Delikatna linia */
+}
+
+.header h1 {
+    font-size: 2.5em; /* Większy nagłówek */
+    color: var(--color-accent-brown); /* Kolor nagłówka jak na screenie */
+    margin-bottom: 5px;
+    font-weight: bold;
+    letter-spacing: 1px; /* Delikatny odstęp między literami */
+}
+
+.header .policy-title {
+    font-size: 1.4em;
+    color: var(--color-text-dark);
+    font-weight: normal;
+    opacity: 0.8;
+    margin-top: 0;
+}
+
+h2 {
+    color: var(--color-accent-brown); /* Nagłówki sekcji w kolorze akcentu */
+    border-bottom: 1px solid rgba(var(--color-accent-brown), 0.2); /* Delikatna linia pod nagłówkami */
+    padding-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.6em;
+    font-weight: 600;
+}
+
+/* --- Paragrafy i listy --- */
+p {
+    margin-bottom: 18px; /* Większy odstęp między paragrafami */
+    color: var(--color-text-dark);
+}
+
+ul {
+    list-style: disc;
+    margin-left: 25px; /* Większy wcięcie */
+    margin-bottom: 20px;
+    color: var(--color-text-dark);
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+strong {
+    color: var(--color-button-secondary); /* Podkreślenie ważnych fragmentów innym kolorem */
+    font-weight: bold;
+}
+
+/* --- Linki --- */
+a {
+    color: var(--color-accent-brown); /* Kolor linków w stylu akcentu */
+    text-decoration: none; /* Bez podkreślenia */
+    border-bottom: 1px dashed rgba(var(--color-accent-brown), 0.5); /* Delikatne podkreślenie przy najechaniu */
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-button-primary); /* Kolor przy najechaniu */
+    border-bottom-color: var(--color-button-primary);
+}
+
+/* --- Sekcje polityki --- */
+.policy-section {
+    margin-bottom: 30px; /* Odstęp między sekcjami */
+}
+
+/* --- Sekcja kontaktu --- */
+.contact-info {
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(var(--color-text-dark), 0.1);
+}
