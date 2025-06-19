@@ -1,6 +1,6 @@
 # TimeMelt - Digital Detox Clock
 
-![TimeMelt Icon](images/main.png)
+![TimeMelt Icon](images/banner.png)
 
 A Chrome browser extension that helps you monitor and analyze the time spent on websites that "melt" your time, supporting better time management and digital detox.
 
