@@ -1,29 +1,37 @@
 :root {
-    /* Główny kolor tła strony/aplikacji - jasny, lekko różowy */
-    --bg-main: #FDECEF; 
-    /* Kolor tła dla sekcji/paneli - żółtopomarańczowy */
-    --bg-section: #F2C14E; 
-    /* Ciemny kolor tekstu, np. dla nagłówków i ważnych informacji - ciemny brąz/oliwka */
-    --text-dark: #604F2F; 
-    /* Miękki, delikatniejszy kolor tekstu - ciepły szaro-brązowy */
-    --text-soft: #68534D; 
-    /* Główny kolor akcentujący, dla przycisków, nagłówków tabel - wyrazisty pomarańczowy */
-    --accent-main: #F78154; 
-    /* Trzeciorzędny kolor akcentujący - bardzo jasny pomarańczowo-różowy (nieużywany bezpośrednio w tym kodzie) */
-    --accent-third: #ffc0a7; 
-    /* Drugorzędny kolor akcentujący, do wyróżnień lub stanów hover - ten sam co --bg-section */
-    --accent-secondary: #F2C14E; 
+    /* Główny kolor tła strony/aplikacji - Jasny, neutralny szary (bez zmian) */
+    --bg-main: #D5D5D5;
 
-    /* Kolor tła dla kart/komponentów wewnątrz sekcji - czysta biel */
-    --card-bg: #FFFFFF; 
-    /* Ciemniejszy kolor tła, prawdopodobnie dla tła wierszy tabeli - jasny, kremowy */
-    --bg-dark: #FFF5E1; 
-    /* Główny kolor tekstu - ciemnoszary */
-    --text-main: #333333; 
-    /* Wyciszony kolor tekstu, np. dla tekstu pomocniczego lub stylizowanego na kursywę - jasnoszary */
-    --text-muted: #999999;
+    /* Kolor tła dla sekcji/paneli - Ciepły, stonowany szaro-brązowy/oliwkowy beż (bez zmian) */
+    --bg-section: #ADA597;
+
+    /* Ciemny kolor tekstu, np. dla nagłówków i ważnych informacji - Ciemny, głęboki granat/stalowy niebieski (bez zmian) */
+    --text-dark: #384452;
+
+    /* Miękki, delikatniejszy kolor tekstu - Bardzo ciemny, prawie czarny granat (bez zmian) */
+    --text-soft: #10233A;
+
+    /* NOWY GŁÓWNY KOLOR AKCENTUJĄCY - Głęboki, stonowany złoty/mosiądz. Energetyczny, ale elegancki i nie jaskrawy. */
+    --accent-main: #A67B38; /* A rich, muted gold/brass. Strong presence without being jarring. */
+
+    /* Trzeciorzędny kolor akcentujący - Bardzo jasny odcień nowego accent-main (subtelny złoty beż) */
+    --accent-third: #EBDAC5; /* Lighter, desaturated version of the new accent-main for active states. */
+
+    /* Drugorzędny kolor akcentujący, do wyróżnień lub stanów hover - Jasny szary (bez zmian, dobrze pełni rolę neutralnego hovera) */
+    --accent-secondary: #B0B0B0;
+
+    /* Kolor tła dla kart/komponentów wewnątrz sekcji - Czysta biel (bez zmian) */
+    --card-bg: #FFFFFF;
+
+    /* Ciemniejszy kolor tła, prawdopodobnie dla tła wierszy tabeli - Jasny, kremowy/bardzo jasny beż (bez zmian) */
+    --bg-dark: #F5F5DC;
+
+    /* Główny kolor tekstu - Granat (bez zmian) */
+    --text-main: #384452;
+
+    /* Wyciszony kolor tekstu, np. dla tekstu pomocniczego lub stylizowanego na kursywę - Jaśniejszy granat/szaroniebieski (bez zmian) */
+    --text-muted: #6B778D;
 }
-
 body {
     font-family: 'Delius';
     background-color: var(--bg-main);
@@ -44,7 +52,7 @@ body {
     left: 40px;
     font-size: 15px;
     height: 25px !important;
-    color: var(--text-dark);
+    color: var(--text-dark); /* Zmieniony kolor linku */
     text-decoration: none;
 }
 
@@ -88,23 +96,27 @@ body {
     margin-bottom: 15px;
 }
 
-#backButton {
-    background-color: var(--accent-secondary);
-    color: var(--text-dark);
+/* Back button style */
+#backButton,
+#backButtonWebsites {
+    background-color: var(--accent-main); /* Subtelne tło */
+    color: var(--card-bg); /* Ciemny tekst */
     border: none;
     border-radius: 25px;
     padding: 8px 15px;
     font-size: 14px;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
     margin-bottom: 15px;
 }
 
-#backButton:hover {
-    background-color: var(--accent-main);
-    color: var(--card-bg);
+#backButton:hover,
+#backButtonWebsites:hover {
+    background-color: var(--accent-secondary); /* Jasny żółty na hover */
+    color: var(--text-dark); /* Tekst pozostaje ciemny dla kontrastu */
 }
+
 
 #detailedTimeTable {
     width: 100%;
@@ -123,7 +135,7 @@ body {
 }
 
 #detailedTimeTable th {
-    background-color: var(--accent-main);
+    background-color: var(--accent-main); /* Nagłówek tabeli - akcent główny */
     color: var(--card-bg);
     font-weight: bold;
 }
@@ -164,7 +176,7 @@ body {
 }
 
 #CustomizeWebsitesTable th {
-    background-color: var(--accent-main);
+    background-color: var(--accent-main); /* Nagłówek tabeli - akcent główny */
     color: var(--card-bg);
     font-weight: bold;
 }
@@ -192,16 +204,17 @@ body {
     margin-bottom: 10px !important;
 }
 
+/* Adjusting Add Website Button position */
 #addWebsiteButton {
     margin-top: 10px;
-    margin-left: 215px;
+    margin-left: 215px; /* Adjust as needed */
     margin-bottom: 0px !important;
 }
 
 h1 {
     margin-top: 10px;
     text-align: center;
-    color: var(--accent-main);
+    color: var(--text-dark); /* Zmieniony kolor tytułu głównego na text-dark */
     font-size: 40px;
     margin-bottom: 10px;
 }
@@ -240,7 +253,7 @@ tr:nth-child(even) td {
 
 tr:hover td {
     background-color: var(--accent-secondary);
-    color: var(--card-bg);
+    color: var(--card-bg); /* Tekst biały na hover */
 }
 
 td:first-child {
@@ -252,7 +265,26 @@ td:last-child {
     font-style: italic;
 }
 
+/* General button style */
 button {
+    background-color: var(--accent-main); /* Główny akcent dla domyślnych przycisków */
+    color: var(--card-bg); /* Biały tekst */
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--accent-secondary); /* Jasny żółty na hover */
+    color: var(--text-dark); /* Tekst ciemny na hover */
+}
+
+/* Customize list button specific style */
+#customizeList {
     background-color: var(--accent-main);
     color: var(--card-bg);
     border: none;
@@ -261,12 +293,48 @@ button {
     font-size: 14px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-button:hover {
+#customizeList:hover {
     background-color: var(--accent-secondary);
+    color: var(--text-dark);
 }
+
+/* Add website button specific style */
+#addWebsiteButton {
+    background-color: var(--accent-main);
+    color: var(--card-bg);
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#addWebsiteButton:hover {
+    background-color: var(--accent-secondary);
+    color: var(--text-dark);
+}
+
+/* Delete button specific style in Customize Websites Table */
+.customize-table button.delete-button {
+    background-color: var(--accent-main); /* Stonowana terakota */
+    color: var(--card-bg); /* Biały tekst */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.customize-table button.delete-button:hover {
+    background-color: var(--text-dark); /* Ciemny morski/granat na hover */
+    color: var(--card-bg);
+}
+
 
 .chart-section, .websites-section {
     width: 100%;
@@ -274,7 +342,7 @@ button:hover {
     background-color: var(--bg-section);
     border-radius: 15px;
     padding: 20px;
-    margin-bottom: 10px; /* Reduced margin-bottom */
+    margin-bottom: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -288,44 +356,46 @@ button:hover {
     justify-content: center;
 }
 
+/* Time Period Toggles (D, W, M, Y) - Main View */
 .time-toggles button {
-    background-color: var(--accent-main);
-    color: var(--text-dark);
+    background-color: var(--accent-main); /* Domyślny kolor tła */
+    color: var(--card-bg); /* Biały tekst na domyślnym */
     border: none;
     border-radius: 15px;
     padding: 5px 10px;
     margin: 0 5px;
     font-size: 12px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .time-toggles button:hover {
-    background-color: var(--accent-main);
-    color: var(--card-bg);
+    background-color: var(--accent-secondary); /* Jasny żółty na hover */
+    color: var(--text-dark); /* Ciemny tekst na hover */
 }
 
+/* Time Period Toggles (D, W, M, Y) - Detailed View */
 .time-toggles-detailed {
     display: flex;
     justify-content: center;
-    margin-bottom: 15px; /* Add some space below the toggles */
+    margin-bottom: 15px;
 }
 
 .time-toggles-detailed button {
-    background-color: var(--accent-secondary);
-    color: var(--text-dark);
+    background-color: var(--accent-main); /* Domyślny kolor tła */
+    color: var(--card-bg); /* Biały tekst na domyślnym */
     border: none;
     border-radius: 15px;
     padding: 5px 10px;
     margin: 0 5px;
     font-size: 12px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .time-toggles-detailed button:hover {
-    background-color: var(--accent-main);
-    color: var(--card-bg);
+    background-color: var(--accent-secondary); /* Jasny żółty na hover */
+    color: var(--text-dark); /* Ciemny tekst na hover */
 }
 
 #timeChart {
@@ -360,7 +430,7 @@ button:hover {
     font-size: 14px;
 }
 
-#websiteList li span {
+#websiteList li strong { /* Zmieniono span na strong, aby pasowało do JS innerHTML */
     font-weight: bold;
     color: var(--text-dark);
 }

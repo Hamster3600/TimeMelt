@@ -51,6 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeChart = null;
     let currentTimeData = {};
 
+    // Get computed styles for CSS variables
+    const styles = getComputedStyle(document.documentElement);
+    const accentMain = styles.getPropertyValue('--accent-main').trim();
+    const accentThird = styles.getPropertyValue('--accent-third').trim();
+    const accentSecondary = styles.getPropertyValue('--accent-secondary').trim();
+    const textDark = styles.getPropertyValue('--text-dark').trim();
+    const cardBg = styles.getPropertyValue('--card-bg').trim();
+
     // Populating list of websites
     function populateWebsiteList(timeData, monitoredWebsites) {
         let countOfWebsites = monitoredWebsites.length;
@@ -92,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedTime = `${hours}h ${minutes}m`;
 
             const listItem = document.createElement('li');
+            // Changed <strong> to match CSS for websiteList li strong
             listItem.innerHTML = `<strong>${website}</strong> ${formattedTime}`;
             websiteListUl.appendChild(listItem);
         });
@@ -116,12 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     data: data,
                     backgroundColor: [
-                        '#F78154', // accent-main
-                        '#F2C14E', // accent-secondary
-                        '#604F2F', // text-dark
-                        '#68534D', // text-soft
-                        '#FDECEF', // bg-main
-                        '#F2C14E', // bg-section
+                        accentMain,      // --accent-main
+                        accentSecondary, // --accent-secondary
+                        textDark,        // --text-dark
+                        styles.getPropertyValue('--text-soft').trim(), // --text-soft
+                        styles.getPropertyValue('--bg-main').trim(),  // --bg-main
+                        styles.getPropertyValue('--bg-section').trim(), // --bg-section
                     ],
                     borderColor: '#fff',
                     borderWidth: 2
@@ -162,13 +171,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const entryDate = new Date(dateStr);
                 let include = false;
     
+                // Reset background colors for all buttons first
+                D.style.backgroundColor = accentMain;
+                W.style.backgroundColor = accentMain;
+                M.style.backgroundColor = accentMain;
+                Y.style.backgroundColor = accentMain;
+
+                // Set text color for all buttons to white for better contrast
+                D.style.color = cardBg;
+                W.style.color = cardBg;
+                M.style.color = cardBg;
+                Y.style.color = cardBg;
+    
                 switch (period) {
                     case 'D':
                         include = entryDate.toDateString() === now.toDateString();
-                        D.style.backgroundColor = '#ffc0a7';
-                        W.style.backgroundColor = '#F78154';
-                        M.style.backgroundColor = '#F78154';
-                        Y.style.backgroundColor = '#F78154';
+                        D.style.backgroundColor = accentThird; // Active state: very light peach/pink
+                        D.style.color = textDark; // Dark text for active state
                         break;
                     case 'W':
                         const day = now.getDay();
@@ -177,25 +196,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         startOfWeek.setDate(diff);
                         startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
-                        D.style.backgroundColor = '#F78154';
-                        W.style.backgroundColor = '#ffc0a7';
-                        M.style.backgroundColor = '#F78154';
-                        Y.style.backgroundColor = '#F78154';
+                        W.style.backgroundColor = accentThird;
+                        W.style.color = textDark;
                         break;
                     case 'M':
                         include = entryDate.getMonth() === now.getMonth() &&
                         entryDate.getFullYear() === now.getFullYear();
-                        D.style.backgroundColor = '#F78154';
-                        W.style.backgroundColor = '#F78154';
-                        M.style.backgroundColor = '#ffc0a7';
-                        Y.style.backgroundColor = '#F78154';
+                        M.style.backgroundColor = accentThird;
+                        M.style.color = textDark;
                         break;
                     case 'Y':
                         include = entryDate.getFullYear() === now.getFullYear();
-                        D.style.backgroundColor = '#F78154';
-                        W.style.backgroundColor = '#F78154';
-                        M.style.backgroundColor = '#F78154';
-                        Y.style.backgroundColor = '#ffc0a7';
+                        Y.style.backgroundColor = accentThird;
+                        Y.style.color = textDark;
                         break;
                 }
     
@@ -228,13 +241,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const entryDate = new Date(dateStr);
                 let include = false;
 
+                // Reset background colors for all buttons first
+                DDetailed.style.backgroundColor = accentMain;
+                WDetailed.style.backgroundColor = accentMain;
+                MDetailed.style.backgroundColor = accentMain;
+                YDetailed.style.backgroundColor = accentMain;
+
+                // Set text color for all buttons to white for better contrast
+                DDetailed.style.color = cardBg;
+                WDetailed.style.color = cardBg;
+                MDetailed.style.color = cardBg;
+                YDetailed.style.color = cardBg;
+
                 switch (period) {
                     case 'D':
                         include = entryDate.toDateString() === now.toDateString();
-                        DDetailed.style.backgroundColor = '#ffc0a7';
-                        WDetailed.style.backgroundColor = '#F78154';
-                        MDetailed.style.backgroundColor = '#F78154';
-                        YDetailed.style.backgroundColor = '#F78154';
+                        DDetailed.style.backgroundColor = accentThird;
+                        DDetailed.style.color = textDark;
                         break;
                     case 'W':
                         const day = now.getDay();
@@ -243,25 +266,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         startOfWeek.setDate(diff);
                         startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
-                        DDetailed.style.backgroundColor = '#F78154';
-                        WDetailed.style.backgroundColor = '#ffc0a7';
-                        MDetailed.style.backgroundColor = '#F78154';
-                        YDetailed.style.backgroundColor = '#F78154';
+                        WDetailed.style.backgroundColor = accentThird;
+                        WDetailed.style.color = textDark;
                         break;
                     case 'M':
                         include = entryDate.getMonth() === now.getMonth() &&
                                   entryDate.getFullYear() === now.getFullYear();
-                        DDetailed.style.backgroundColor = '#F78154';
-                        WDetailed.style.backgroundColor = '#F78154';
-                        MDetailed.style.backgroundColor = '#ffc0a7';
-                        YDetailed.style.backgroundColor = '#F78154';
+                        MDetailed.style.backgroundColor = accentThird;
+                        MDetailed.style.color = textDark;
                         break;
                     case 'Y':
                         include = entryDate.getFullYear() === now.getFullYear();
-                        DDetailed.style.backgroundColor = '#F78154';
-                        WDetailed.style.backgroundColor = '#F78154';
-                        MDetailed.style.backgroundColor = '#F78154';
-                        YDetailed.style.backgroundColor = '#ffc0a7';
+                        YDetailed.style.backgroundColor = accentThird;
+                        YDetailed.style.color = textDark;
                         break;
                 }
 
@@ -358,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const actionCell = document.createElement("td");
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
+            deleteButton.classList.add("delete-button"); // Added class for CSS styling
             deleteButton.addEventListener("click", () => {
                 chrome.runtime.sendMessage({ action: "removeWebsite", domain: website }, (response) => {
                     if (response?.success) {
