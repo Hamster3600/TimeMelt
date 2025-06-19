@@ -1,4 +1,4 @@
-# ![TimeMelt Icon](images/icon-128.png) TimeMelt - Digital Detox Clock
+# TimeMelt - Digital Detox Clock
 
 ![TimeMelt Icon](images/main.png)
 
