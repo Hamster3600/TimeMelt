@@ -12,7 +12,7 @@
     --text-soft: #10233A;
 
     /* NOWY GŁÓWNY KOLOR AKCENTUJĄCY - Głęboki, stonowany złoty/mosiądz. Energetyczny, ale elegancki i nie jaskrawy. */
-    --accent-main: #A67B38; /* A rich, muted gold/brass. Strong presence without being jarring. */
+    --accent-main: #c98210; /* A rich, muted gold/brass. Strong presence without being jarring. */
 
     /* Trzeciorzędny kolor akcentujący - Bardzo jasny odcień nowego accent-main (subtelny złoty beż) */
     --accent-third: #EBDAC5; /* Lighter, desaturated version of the new accent-main for active states. */
