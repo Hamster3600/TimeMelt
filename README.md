@@ -70,7 +70,7 @@ After installing the extension:
 
 ## Screenshots
 
-(Add screenshots here showcasing the extension's user interface, e.g., the main view with the chart, the website list, and the detailed/list management view.)
+![TimeMelt Icon](images/screenshot.png)
 
 ---
 
