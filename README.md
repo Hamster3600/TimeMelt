@@ -93,3 +93,9 @@ This project is licensed under a custom [LICENSE](LICENSE), based on the [Apache
 Please see the [LICENSE](LICENSE) file for full details.
 
 ---
+
+## Privacy Policy
+
+You can find the Privacy Policy for TimeMelt - Digital Detox Clock at [https://hamster3600.github.io/TimeMelt/](https://hamster3600.github.io/TimeMelt/).
+
+---
