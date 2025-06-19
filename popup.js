@@ -59,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDark = styles.getPropertyValue('--text-dark').trim();
     const cardBg = styles.getPropertyValue('--card-bg').trim();
 
-    // Populating list of websites
     function populateWebsiteList(timeData, monitoredWebsites) {
-        let countOfWebsites = monitoredWebsites.length;
 
         if (!websiteListUl) {
             console.error("Cannot populate website list: websiteListUl not found.");
@@ -77,30 +75,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Calculating hole time for every domain
         const websiteTimePairs = monitoredWebsites.map(website => {
+            let cleanedWebsite = website.replace(/^www\./, '');
             let totalTime = 0;
             if (timeData[website]) {
                 for (const date in timeData[website]) {
                     totalTime += timeData[website][date].time;
                 }
             }
-            return { website, totalTime };
+            return { website: cleanedWebsite, totalTime };
         });
 
-        // Top 4 webistes only
         const topWebsites = websiteTimePairs
             .sort((a, b) => b.totalTime - a.totalTime)
             .slice(0, 3);
 
-        topWebsites.forEach(({ website, totalTime }) => {
+        topWebsites.forEach(({ website, totalTime }) => { 
             const totalMinutes = Math.floor(totalTime / (1000 * 60));
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
             const formattedTime = `${hours}h ${minutes}m`;
 
             const listItem = document.createElement('li');
-            // Changed <strong> to match CSS for websiteList li strong
             listItem.innerHTML = `<strong>${website}</strong> ${formattedTime}`;
             websiteListUl.appendChild(listItem);
         });
@@ -125,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     data: data,
                     backgroundColor: [
-                        accentMain,      // --accent-main
-                        accentSecondary, // --accent-secondary
-                        textDark,        // --text-dark
-                        styles.getPropertyValue('--text-soft').trim(), // --text-soft
-                        styles.getPropertyValue('--bg-main').trim(),  // --bg-main
-                        styles.getPropertyValue('--bg-section').trim(), // --bg-section
+                        accentMain,   
+                        accentSecondary, 
+                        textDark,       
+                        styles.getPropertyValue('--text-soft').trim(), 
+                        styles.getPropertyValue('--bg-main').trim(),
+                        styles.getPropertyValue('--bg-section').trim(), 
                     ],
                     borderColor: '#fff',
                     borderWidth: 2
@@ -151,6 +147,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     title: {
                         display: false,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const totalMs = context.parsed;
+
+                                const totalMinutes = Math.floor(totalMs / (1000 * 60));
+                                const hours = Math.floor(totalMinutes / 60);
+                                const minutes = totalMinutes % 60;
+
+                                return `${context.label}: ${hours}h ${minutes}m`;
+                            }
+                        }
                     }
                 }
             }
@@ -163,36 +172,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function processTimeDataForChart(timeData, period) {
         const now = new Date();
         let filteredData = {};
-    
+
         for (const [domain, dates] of Object.entries(timeData)) {
             if (domain === "null") continue;
-    
+
+            let cleanedDomain = domain.replace(/^www\./, '');
+
             for (const [dateStr, { time }] of Object.entries(dates)) {
                 const entryDate = new Date(dateStr);
                 let include = false;
-    
-                // Reset background colors for all buttons first
+
                 D.style.backgroundColor = accentMain;
                 W.style.backgroundColor = accentMain;
                 M.style.backgroundColor = accentMain;
                 Y.style.backgroundColor = accentMain;
 
-                // Set text color for all buttons to white for better contrast
                 D.style.color = cardBg;
                 W.style.color = cardBg;
                 M.style.color = cardBg;
                 Y.style.color = cardBg;
-    
+
                 switch (period) {
                     case 'D':
                         include = entryDate.toDateString() === now.toDateString();
-                        D.style.backgroundColor = accentThird; // Active state: very light peach/pink
-                        D.style.color = textDark; // Dark text for active state
+                        D.style.backgroundColor = accentThird;
+                        D.style.color = textDark; 
                         break;
                     case 'W':
                         const day = now.getDay();
                         const startOfWeek = new Date(now);
-                        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+                        const diff = now.getDate() - day + (day === 0 ? -6 : 1); 
                         startOfWeek.setDate(diff);
                         startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
@@ -211,21 +220,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         Y.style.color = textDark;
                         break;
                 }
-    
+
                 if (include) {
-                    if (!filteredData[domain]) {
-                        filteredData[domain] = 0;
+                    if (!filteredData[cleanedDomain]) {
+                        filteredData[cleanedDomain] = 0;
                     }
-                    filteredData[domain] += time;
+                    filteredData[cleanedDomain] += time;
                 }
             }
         }
-    
+
         const sortedDomains = Object.entries(filteredData).sort(([, a], [, b]) => b - a);
-        const topDomains = sortedDomains.slice(0, 5);
+        const topDomains = sortedDomains.slice(0, 5); 
         const labels = topDomains.map(([domain]) => domain);
         const data = topDomains.map(([, time]) => time);
-    
+
         return { data, labels };
     }
 
@@ -237,17 +246,17 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const [domain, dates] of Object.entries(timeData)) {
             if (domain === "null") continue;
 
+            let cleanedDomain = domain.replace(/^www\./, '');
+
             for (const [dateStr, { time }] of Object.entries(dates)) {
                 const entryDate = new Date(dateStr);
                 let include = false;
 
-                // Reset background colors for all buttons first
                 DDetailed.style.backgroundColor = accentMain;
                 WDetailed.style.backgroundColor = accentMain;
                 MDetailed.style.backgroundColor = accentMain;
                 YDetailed.style.backgroundColor = accentMain;
 
-                // Set text color for all buttons to white for better contrast
                 DDetailed.style.color = cardBg;
                 WDetailed.style.color = cardBg;
                 MDetailed.style.color = cardBg;
@@ -283,10 +292,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (include) {
-                    if (!filteredData[domain]) {
-                        filteredData[domain] = {};
+                    if (!filteredData[cleanedDomain]) {
+                        filteredData[cleanedDomain] = {};
                     }
-                    filteredData[domain][dateStr] = { time: time };
+                    filteredData[cleanedDomain][dateStr] = { time: time };
                 }
             }
         }
@@ -300,26 +309,26 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Cannot populate detailed table: detailedTimeTableBody not found.");
             return;
         }
-    
+
         detailedTimeTableBody.innerHTML = "";
         let hasData = false;
-    
+
         for (const [domain, dateEntries] of Object.entries(timeData)) {
             if (domain === "null") continue;
-    
+
             for (const [date, { time }] of Object.entries(dateEntries)) {
                 const totalMinutes = Math.floor(time / (1000 * 60));
                 const hours = Math.floor(totalMinutes / 60);
                 const minutes = totalMinutes % 60;
                 const formattedTime = `${hours}h ${minutes}m`;
-    
+
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${domain}</td><td>${formattedTime}</td><td>${date}</td>`;
+                row.innerHTML = `<td>${domain}</td><td>${formattedTime}</td><td>${date}</td>`; 
                 detailedTimeTableBody.appendChild(row);
                 hasData = true;
             }
         }
-    
+
         if (!hasData) {
             const row = document.createElement('tr');
             row.innerHTML = `<td colspan="3">No data available</td>`;
@@ -367,15 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = "";
 
         websites.forEach((website) => {
+            let cleanedWebsite = website.replace(/^www\./, '');
             const row = document.createElement("tr");
 
             const siteCell = document.createElement("td");
-            siteCell.textContent = website;
+            siteCell.textContent = cleanedWebsite;
 
             const actionCell = document.createElement("td");
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
-            deleteButton.classList.add("delete-button"); // Added class for CSS styling
+            deleteButton.classList.add("delete-button");
             deleteButton.addEventListener("click", () => {
                 chrome.runtime.sendMessage({ action: "removeWebsite", domain: website }, (response) => {
                     if (response?.success) {
@@ -477,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (detailedTimePeriodToggles) {
         detailedTimePeriodToggles.forEach(button => {
             button.addEventListener('click', (event) => {
-                const period = event.target.id.replace('-detailed', ''); // Get period (D, W, M, Y)
+                const period = event.target.id.replace('-detailed', ''); 
                 console.log("Detailed view time period toggled:", period);
 
                 const filteredDetailedData = processTimeDataForDetailedTable(currentTimeData, period);
