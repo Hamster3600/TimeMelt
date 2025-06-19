@@ -24,6 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
     var backButtonWebsites = document.getElementById('backButtonWebsites');
     var CustomizeWebsitesTable = document.getElementById('CustomizeWebsitesTable');
 
+    var DDetailed = document.getElementById('D-detailed');
+    var WDetailed = document.getElementById('W-detailed');
+    var MDetailed = document.getElementById('M-detailed');
+    var YDetailed = document.getElementById('Y-detailed');
+
+    var D = document.getElementById('D');
+    var W = document.getElementById('W');
+    var M = document.getElementById('M');
+    var Y = document.getElementById('Y');
+
+
     // Check if elements are found
     if (!timeChartCanvas) console.error("Error: timeChartCanvas element not found");
     if (!timePeriodToggles.length) console.error("Error: timePeriodToggles elements not found");
@@ -166,6 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 switch (period) {
                     case 'D':
                         include = entryDate.toDateString() === now.toDateString();
+                        D.style.backgroundColor = '#ffc0a7';
+                        W.style.backgroundColor = '#F78154';
+                        M.style.backgroundColor = '#F78154';
+                        Y.style.backgroundColor = '#F78154';
                         break;
                     case 'W':
                         const day = now.getDay();
@@ -174,13 +189,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         startOfWeek.setDate(diff);
                         startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
+                        D.style.backgroundColor = '#F78154';
+                        W.style.backgroundColor = '#ffc0a7';
+                        M.style.backgroundColor = '#F78154';
+                        Y.style.backgroundColor = '#F78154';
                         break;
                     case 'M':
                         include = entryDate.getMonth() === now.getMonth() &&
-                                  entryDate.getFullYear() === now.getFullYear();
+                        entryDate.getFullYear() === now.getFullYear();
+                        D.style.backgroundColor = '#F78154';
+                        W.style.backgroundColor = '#F78154';
+                        M.style.backgroundColor = '#ffc0a7';
+                        Y.style.backgroundColor = '#F78154';
                         break;
                     case 'Y':
                         include = entryDate.getFullYear() === now.getFullYear();
+                        D.style.backgroundColor = '#F78154';
+                        W.style.backgroundColor = '#F78154';
+                        M.style.backgroundColor = '#F78154';
+                        Y.style.backgroundColor = '#ffc0a7';
                         break;
                 }
     
@@ -216,6 +243,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 switch (period) {
                     case 'D':
                         include = entryDate.toDateString() === now.toDateString();
+                        DDetailed.style.backgroundColor = '#ffc0a7';
+                        WDetailed.style.backgroundColor = '#F78154';
+                        MDetailed.style.backgroundColor = '#F78154';
+                        YDetailed.style.backgroundColor = '#F78154';
                         break;
                     case 'W':
                         const day = now.getDay();
@@ -224,13 +255,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         startOfWeek.setDate(diff);
                         startOfWeek.setHours(0, 0, 0, 0);
                         include = entryDate >= startOfWeek;
+                        DDetailed.style.backgroundColor = '#F78154';
+                        WDetailed.style.backgroundColor = '#ffc0a7';
+                        MDetailed.style.backgroundColor = '#F78154';
+                        YDetailed.style.backgroundColor = '#F78154';
                         break;
                     case 'M':
                         include = entryDate.getMonth() === now.getMonth() &&
                                   entryDate.getFullYear() === now.getFullYear();
+                        DDetailed.style.backgroundColor = '#F78154';
+                        WDetailed.style.backgroundColor = '#F78154';
+                        MDetailed.style.backgroundColor = '#ffc0a7';
+                        YDetailed.style.backgroundColor = '#F78154';
                         break;
                     case 'Y':
                         include = entryDate.getFullYear() === now.getFullYear();
+                        DDetailed.style.backgroundColor = '#F78154';
+                        WDetailed.style.backgroundColor = '#F78154';
+                        MDetailed.style.backgroundColor = '#F78154';
+                        YDetailed.style.backgroundColor = '#ffc0a7';
                         break;
                 }
 
