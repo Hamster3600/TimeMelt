@@ -1,79 +1,79 @@
-# TimeMelt - Cyfrowy Zegar Detoksu
+# TimeMelt - Digital Detox Clock
 
 ![TimeMelt Icon](images/icon-128.png)
 
-Rozszerzenie do przeglądarki Chrome, które pomaga monitorować i analizować czas spędzony na stronach internetowych, które "topią" czas, wspierając lepsze zarządzanie czasem i cyfrowy detoks.
+A Chrome browser extension that helps you monitor and analyze the time spent on websites that "melt" your time, supporting better time management and digital detox.
 
 ---
 
-## Spis Treści
+## Table of Contents
 
-- [Funkcje](#funkcje)
-- [Instalacja](#instalacja)
-- [Użycie](#użycie)
-- [Zrzuty Ekranu](#zrzuty-ekranu)
-- [Współpraca](#współpraca)
-- [Licencja](#licencja)
-
----
-
-## Funkcje
-
-*   **Śledzenie Czasu:** Monitoruje czas spędzony na zdefiniowanych stronach internetowych, pomagając zidentyfikować, gdzie ucieka Twój czas.
-*   **Wizualizacja Danych:** Przedstawia dane o spędzonym czasie w formie czytelnego wykresu kołowego, dając szybki przegląd Twojej aktywności.
-*   **Filtrowanie Okresu:** Pozwala przeglądać dane według różnych okresów: dziennego, tygodniowego, miesięcznego i rocznego, umożliwiając analizę trendów.
-*   **Lista Stron:** Wyświetla listę stron, na których spędzasz najwięcej czasu, z podsumowaniem czasu dla każdej z nich.
-*   **Personalizacja Listy:** Umożliwia łatwe dodawanie nowych domen do listy monitorowanych "czasopożeraczy" oraz usuwanie istniejących.
-*   **Szczegółowy Widok:** Dostęp do szczegółowych danych o czasie spędzonym na każdej stronie w poszczególnych dniach, co pozwala na dogłębną analizę.
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## Instalacja
+## Features
 
-Aby zainstalować rozszerzenie TimeMelt w przeglądarce Chrome, wykonaj poniższe kroki:
-
-1.  **Pobierz pliki:** Sklonuj to repozytorium lub pobierz pliki jako archiwum ZIP i rozpakuj je w wybranym miejscu na dysku.
-2.  **Otwórz Zarządzanie Rozszerzeniami:** W przeglądarce Chrome wpisz `chrome://extensions/` w pasku adresu i naciśnij Enter.
-3.  **Włącz Tryb Dewelopera:** W prawym górnym rogu strony włącz przełącznik "Tryb dewelopera" (Developer mode).
-4.  **Załaduj Rozszerzenie:** Kliknij przycisk "Załaduj rozpakowane" (Load unpacked) w lewym górnym rogu i wybierz folder, do którego rozpakowałeś pliki rozszerzenia.
-
-Rozszerzenie "TimeMelt - Cyfrowy Zegar Detoksu" powinno pojawić się na liście zainstalowanych rozszerzeń i być gotowe do użycia.
+*   **Time Tracking:** Monitors the time spent on defined websites, helping you identify where your time is going.
+*   **Data Visualization:** Presents time spent data in a clear pie chart, providing a quick overview of your activity.
+*   **Period Filtering:** Allows you to view data by different periods: daily, weekly, monthly, and yearly, enabling trend analysis.
+*   **Website List:** Displays a list of websites where you spend the most time, with a summary of time for each.
+*   **List Customization:** Easily add new domains to the list of monitored "time-wasters" and remove existing ones.
+*   **Detailed View:** Access detailed data on time spent on each website per day, allowing for in-depth analysis.
 
 ---
 
-## Użycie
+## Installation
 
-Po zainstalowaniu rozszerzenia:
+To install the TimeMelt extension in your Chrome browser, follow these steps:
 
-1.  **Otwórz Popup:** Kliknij ikonę rozszerzenia TimeMelt na pasku narzędzi Chrome.
-2.  **Przeglądaj Dane:** Wyskakujące okienko pokaże wykres przedstawiający czas spędzony na monitorowanych stronach w wybranym okresie (domyślnie dzisiaj).
-3.  **Zmień Okres:** Użyj przycisków **D** (Dzień), **W** (Tydzień), **M** (Miesiąc), **Y** (Rok), aby zmienić okres raportowania danych na wykresie i liście.
-4.  **Lista Stron:** Poniżej wykresu znajduje się lista stron, na których spędzasz najwięcej czasu, wraz z podsumowaniem.
-5.  **Dostosuj Listę:** Kliknij przycisk **"Customize list"**, aby przejść do widoku zarządzania listą monitorowanych stron. Tutaj możesz **"Add"** (dodać) nowe domeny lub **"Delete"** (usunąć) istniejące.
-6.  **Szczegółowe Dane:** Kliknij link **"see more..."** pod wykresem, aby zobaczyć szczegółową tabelę z danymi o czasie spędzonym na poszczególnych stronach w wybranym okresie, z podziałem na dni.
+1.  **Download Files:** Clone this repository or download the files as a ZIP archive and extract them to a location on your computer.
+2.  **Open Extensions Management:** In your Chrome browser, type `chrome://extensions/` in the address bar and press Enter.
+3.  **Enable Developer Mode:** In the top right corner of the page, toggle on "Developer mode".
+4.  **Load Extension:** Click the "Load unpacked" button in the top left corner and select the folder where you extracted the extension files.
 
----
-
-## Zrzuty Ekranu
-
-(Dodaj tutaj zrzuty ekranu prezentujące interfejs użytkownika rozszerzenia, np. widok główny z wykresem, listę stron i widok szczegółowy/zarządzania listą.)
+The "TimeMelt - Digital Detox Clock" extension should appear in your list of installed extensions and be ready to use.
 
 ---
 
-## Współpraca
+## Usage
 
-Wszelkie sugestie, zgłoszenia błędów i wkład w rozwój projektu są mile widziane!
+After installing the extension:
 
-1.  Zrób fork repozytorium.
-2.  Stwórz nową gałąź (`git checkout -b feature/nazwa-funkcji`).
-3.  Zatwierdź swoje zmiany (`git commit -am 'Dodaj nową funkcję'`).
-4.  Wypchnij do gałęzi (`git push origin feature/nazwa-funkcji`).
-5.  Otwórz Pull Request.
+1.  **Open Popup:** Click the TimeMelt extension icon in the Chrome toolbar.
+2.  **View Data:** The popup window will show a chart displaying the time spent on monitored websites for the selected period (default is today).
+3.  **Change Period:** Use the **D** (Day), **W** (Week), **M** (Month), **Y** (Year) buttons to change the reporting period for the chart and list.
+4.  **Website List:** Below the chart is a list of websites where you spend the most time, with a summary.
+5.  **Customize List:** Click the **"Customize list"** button to go to the view for managing the list of monitored websites. Here you can **"Add"** new domains or **"Delete"** existing ones.
+6.  **Detailed Data:** Click the **"see more..."** link below the chart to see a detailed table with data on time spent on individual websites for the selected period, broken down by day.
 
 ---
 
-## Licencja
+## Screenshots
 
-Ten projekt jest objęty licencją MIT. Więcej informacji znajdziesz w pliku [LICENSE](LICENSE) (jeśli jest dostępny w repozytorium).
+(Add screenshots here showcasing the extension's user interface, e.g., the main view with the chart, the website list, and the detailed/list management view.)
+
+---
+
+## Contributing
+
+All suggestions, bug reports, and contributions to the project are welcome!
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/new-feature-name`).
+3.  Commit your changes (`git commit -am 'Add new feature'`).
+4.  Push to the branch (`git push origin feature/new-feature-name`).
+5.  Open a Pull Request.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file (if available in the repository) for details.
 
 ---
