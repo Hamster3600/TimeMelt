@@ -1,3 +1,14 @@
+function getMonitoredWebsites(callback) {
+    chrome.storage.local.get(["TimeWastingDomains"], (result) => {
+        if (chrome.runtime.lastError) {
+            console.error("Storage error:", chrome.runtime.lastError);
+            callback([]); // Return empty array on error
+            return;
+        }
+        callback(result.TimeWastingDomains || []);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     var timeChartCanvas = document.getElementById('timeChart');
     var timePeriodToggles = document.querySelectorAll('.time-toggles button');
@@ -26,18 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let timeChart = null;
     let currentTimeData = {}; // Store fetched time data
-
-    // Function to get the list of monitored websites from storage
-    function getMonitoredWebsites(callback) {
-        chrome.storage.local.get(["TimeWastingDomains"], (result) => {
-            if (chrome.runtime.lastError) {
-                console.error("Storage error:", chrome.runtime.lastError);
-                callback([]); // Return empty array on error
-                return;
-            }
-            callback(result.TimeWastingDomains || []); // Return the list or an empty array
-        });
-    }
 
     // Function to save the list of monitored websites to storage
     function saveMonitoredWebsites(monitoredWebsites, callback) {
@@ -280,34 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function populateDetailedTableWebsites(monitoredWebsites) {
-        if (!CustomizeWebsitesTable) {
-            console.error("Cannot populate customize websites table: CustomizeWebsitesTable not found.");
-            return;
-        }
-
-        const tbody = CustomizeWebsitesTable.querySelector('tbody');
-        if (!tbody) {
-            console.error("Cannot populate customize websites table: tbody not found.");
-            return;
-        }
-
-        tbody.innerHTML = ""; // Clear existing table rows
-
-        if (monitoredWebsites.length === 0) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="1">No websites being monitored.</td>`;
-            tbody.appendChild(row);
-            return;
-        }
-
-        monitoredWebsites.forEach(website => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${website}</td>`; // Only display the website for customization
-            tbody.appendChild(row);
-        });
-    }
-
     // Function to show the detailed view
     function showDetailedView() {
         if (document.querySelector('.chart-section')) document.querySelector('.chart-section').style.display = 'none';
@@ -322,12 +293,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function showDetailedViewWebsites(){
         if (document.querySelector('.chart-section')) document.querySelector('.chart-section').style.display = 'none';
         if (document.querySelector('.websites-section')) document.querySelector('.websites-section').style.display = 'none';
-        if (timeTable) timeTable.style.display = 'none'; // Hide the original table
-        if (detailedView) detailedView.style.display = 'none'; // Hide detailed time view
+        if (timeTable) timeTable.style.display = 'none'; // Ukryj oryginalną tabelę
+        if (detailedView) detailedView.style.display = 'none'; // Ukryj szczegółowy widok czasu
         if (detailedViewWebsites) detailedViewWebsites.style.display = 'block';
 
         getMonitoredWebsites((monitoredWebsites) => {
-            populateDetailedTableWebsites(monitoredWebsites);
+            // ZMIEŃ TĘ LINIĘ:
+            // populateDetailedTableWebsites(monitoredWebsites);
+            // NA TĘ:
+            renderCustomWebsites(monitoredWebsites);
         });
     }
 
@@ -341,7 +315,55 @@ document.addEventListener('DOMContentLoaded', () => {
         if (detailedView) detailedView.style.display = 'none';
         if (detailedViewWebsites) detailedViewWebsites.style.display = 'none';
     }
-    
+
+    function renderCustomWebsites(websites) {
+        const tableBody = document.querySelector("#CustomizeWebsitesTable tbody");
+        tableBody.innerHTML = "";
+
+        websites.forEach((website) => {
+            const row = document.createElement("tr");
+
+            const siteCell = document.createElement("td");
+            siteCell.textContent = website;
+
+            const actionCell = document.createElement("td");
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", () => {
+                chrome.runtime.sendMessage({ action: "removeWebsite", domain: website }, (response) => {
+                    if (response?.success) {
+                        chrome.storage.local.get(["TimeWastingDomains"], (result) => {
+                            renderCustomWebsites(result.TimeWastingDomains || []);
+                        });
+                    } else {
+                        alert("Błąd przy usuwaniu: " + (response?.message || ""));
+                    }
+                });
+            });
+
+            actionCell.appendChild(deleteButton);
+            row.appendChild(siteCell);
+            row.appendChild(actionCell);
+            tableBody.appendChild(row);
+        });
+    }
+
+
+    document.getElementById("addWebsiteButton").addEventListener("click", () => {
+        const newSite = prompt("Enter a new website domain:");
+        if (newSite) {
+            chrome.runtime.sendMessage({ action: "addWebsite", domain: newSite }, (response) => {
+                if (response?.success) {
+                    chrome.storage.local.get(["TimeWastingDomains"], (result) => {
+                        renderCustomWebsites(result.TimeWastingDomains || []);
+                    });
+                } else {
+                    alert("Błąd przy dodawaniu: " + (response?.message || ""));
+                }
+            });
+        }
+    });
+
 
     // Initial data load and rendering
     chrome.storage.local.get({ timeData: {} }, (result) => {
@@ -420,18 +442,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-});
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === 'local' && changes.TimeWastingDomains) {
+            console.log("TimeWastingDomains changed in storage. Updating views.");
+            const newMonitoredWebsites = changes.TimeWastingDomains.newValue || [];
 
-// Listen for changes in storage and update the displayed list if the customize view is open
-chrome.storage.onChanged.addListener((changes, namespace) => {
-    if (namespace === 'local' && changes.TimeWastingDomains) {
-        console.log("TimeWastingDomains changed in storage. Updating customize websites list.");
-        // Check if the detailedViewWebsites is currently displayed
-        if (detailedViewWebsites && detailedViewWebsites.style.display !== 'none') {
-            getMonitoredWebsites((monitoredWebsites) => {
-                populateDetailedTableWebsites(monitoredWebsites);
-            });
+            // 1. Zaktualizuj główną listę stron
+            populateWebsiteList(currentTimeData, newMonitoredWebsites);
+
+            // 2. Zaktualizuj listę w widoku dostosowywania, jeśli jest widoczna
+            if (detailedViewWebsites && detailedViewWebsites.style.display !== 'none') {
+                renderCustomWebsites(newMonitoredWebsites);
+            }
         }
-    }
+    });
 });
-

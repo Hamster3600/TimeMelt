@@ -13,7 +13,7 @@ function getDomainList() {
 
         if (!result.TimeWastingDomains) {
             // Jeśli nie istnieje — ustaw domyślną listę
-            const defaultDomains = ["www.youtube.com", "www.instagram.com", "www.facebook.com", "www.twitter.com", "www.reddit.com", "www.tiktok.com"];
+            const defaultDomains = ["youtube.com", "instagram.com", "facebook.com", "x.com", "reddit.com", "tiktok.com"];
             chrome.storage.local.set({ TimeWastingDomains: defaultDomains }, () => {
                 if (chrome.runtime.lastError) {
                     console.error("Error setting default domains:", chrome.runtime.lastError);
@@ -29,6 +29,52 @@ function getDomainList() {
         }
     });
 }
+
+function addWebsite(domain, sendResponse) {
+    chrome.storage.local.get(["TimeWastingDomains"], (result) => {
+        const currentList = result.TimeWastingDomains || [];
+        if (!currentList.includes(domain)) {
+            currentList.push(domain);
+            chrome.storage.local.set({ TimeWastingDomains: currentList }, () => {
+                cachedDomainList = currentList; // Zaktualizuj cache
+                console.log(`Dodano domenę do TimeWastingDomains: ${domain}`);
+                sendResponse({ success: true });
+            });
+        } else {
+            sendResponse({ success: false, message: "Domena już istnieje" });
+        }
+    });
+
+    return true; // konieczne dla asynchronicznego sendResponse
+}
+
+function removeWebsite(domain, sendResponse) {
+    chrome.storage.local.get(["TimeWastingDomains"], (result) => {
+        let currentList = result.TimeWastingDomains || [];
+        const index = currentList.indexOf(domain);
+        if (index > -1) {
+            currentList.splice(index, 1);
+            chrome.storage.local.set({ TimeWastingDomains: currentList }, () => {
+                cachedDomainList = currentList;
+                console.log(`Usunięto domenę z TimeWastingDomains: ${domain}`);
+                sendResponse({ success: true });
+            });
+        } else {
+            sendResponse({ success: false, message: "Domena nie znaleziona" });
+        }
+    });
+
+    return true;
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "addWebsite") {
+        return addWebsite(message.domain, sendResponse);
+    }
+    if (message.action === "removeWebsite") {
+        return removeWebsite(message.domain, sendResponse);
+    }
+}); 
 
 
 // Checks if the domain is on the list (using cached list)
@@ -200,3 +246,5 @@ chrome.windows.getLastFocused({}, (window) => {
         }
     }
 });
+
+getDomainList();
