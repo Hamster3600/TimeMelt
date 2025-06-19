@@ -88,6 +88,8 @@ All suggestions, bug reports, and contributions to the project are welcome!
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file (if available in the repository) for details.
+This project is licensed under a custom [LICENSE](LICENSE), based on the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0), with additional terms restricting commercial use.
+
+Please see the [LICENSE](LICENSE) file for full details.
 
 ---
