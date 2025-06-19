@@ -30,12 +30,26 @@ A Chrome browser extension that helps you monitor and analyze the time spent on 
 
 ## Installation
 
-To install the TimeMelt extension in your Chrome browser, follow these steps:
+To install the TimeMelt extension in your Chrome browser, choose your preferred method:
 
-1.  **Download Files:** Clone this repository or download the files as a ZIP archive and extract them to a location on your computer.
-2.  **Open Extensions Management:** In your Chrome browser, type `chrome://extensions/` in the address bar and press Enter.
-3.  **Enable Developer Mode:** In the top right corner of the page, toggle on "Developer mode".
-4.  **Load Extension:** Click the "Load unpacked" button in the top left corner and select the folder where you extracted the extension files.
+### Option 1: Install from Chrome Web Store (Recommended)
+
+This is the easiest way to install TimeMelt and receive automatic updates.
+
+1.  Visit the [TimeMelt - Digital Detox Clock page on the Chrome Web Store](LINK_DO_CHROME_WEB_STORE_TUTAJ).
+2.  Click the "Add to Chrome" button.
+3.  Follow the on-screen prompts to confirm the installation.
+
+### Option 2: Manual Installation (For developers or advanced users)
+
+If you prefer to install the extension directly from the source code (e.g., for development or testing pre-release versions), follow these steps:
+
+1.  **Download Files**:
+    * **From Releases**: Go to the [Releases](https://github.com/YOUR_USERNAME/TimeMelt/releases) section of this repository and download the latest `TimeMelt-DigitalDetoxClock.zip` file (or similar name) from the assets of the desired release. Unzip the downloaded file to a location on your computer.
+    * **Or Clone Repository**: `git clone https://github.com/YOUR_USERNAME/TimeMelt.git` or download the files as a ZIP archive and extract them.
+2.  **Open Extensions Management**: In your Chrome browser, type `chrome://extensions/` in the address bar and press Enter.
+3.  **Enable Developer Mode**: In the top right corner of the page, toggle on "Developer mode".
+4.  **Load Extension**: Click the "Load unpacked" button in the top left corner and select the folder where you extracted the extension files (either from the unzipped release or the cloned repository).
 
 The "TimeMelt - Digital Detox Clock" extension should appear in your list of installed extensions and be ready to use.
 
