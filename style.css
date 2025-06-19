@@ -1,19 +1,28 @@
 :root {
-    --bg-main: #FDECEF;
-    --bg-section: #F2C14E;
-    --text-dark: #604F2F;
-    --text-soft: #68534D;
-    --accent-main: #F78154;
-    --accent-third: #ffc0a7;
-    --accent-secondary: #F2C14E;
+    /* Główny kolor tła strony/aplikacji - jasny, lekko różowy */
+    --bg-main: #FDECEF; 
+    /* Kolor tła dla sekcji/paneli - żółtopomarańczowy */
+    --bg-section: #F2C14E; 
+    /* Ciemny kolor tekstu, np. dla nagłówków i ważnych informacji - ciemny brąz/oliwka */
+    --text-dark: #604F2F; 
+    /* Miękki, delikatniejszy kolor tekstu - ciepły szaro-brązowy */
+    --text-soft: #68534D; 
+    /* Główny kolor akcentujący, dla przycisków, nagłówków tabel - wyrazisty pomarańczowy */
+    --accent-main: #F78154; 
+    /* Trzeciorzędny kolor akcentujący - bardzo jasny pomarańczowo-różowy (nieużywany bezpośrednio w tym kodzie) */
+    --accent-third: #ffc0a7; 
+    /* Drugorzędny kolor akcentujący, do wyróżnień lub stanów hover - ten sam co --bg-section */
+    --accent-secondary: #F2C14E; 
 
-    /* DODAJ TO ↓↓↓↓↓↓↓ */
-    --card-bg: #FFFFFF;
-    --bg-dark: #FFF5E1;
-    --text-main: #333333;
+    /* Kolor tła dla kart/komponentów wewnątrz sekcji - czysta biel */
+    --card-bg: #FFFFFF; 
+    /* Ciemniejszy kolor tła, prawdopodobnie dla tła wierszy tabeli - jasny, kremowy */
+    --bg-dark: #FFF5E1; 
+    /* Główny kolor tekstu - ciemnoszary */
+    --text-main: #333333; 
+    /* Wyciszony kolor tekstu, np. dla tekstu pomocniczego lub stylizowanego na kursywę - jasnoszary */
     --text-muted: #999999;
 }
-
 
 body {
     font-family: 'Delius';
@@ -322,7 +331,7 @@ button:hover {
 #timeChart {
     width: 400px !important;
     max-width: 300px !important;
-    height: auto !important; /* Ensure height is auto */
+    height: auto !important;
 }
 
 .websites-section h2 {

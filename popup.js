@@ -1,8 +1,9 @@
+// caling function to get time wasting webistes
 function getMonitoredWebsites(callback) {
     chrome.storage.local.get(["TimeWastingDomains"], (result) => {
         if (chrome.runtime.lastError) {
             console.error("Storage error:", chrome.runtime.lastError);
-            callback([]); // Return empty array on error
+            callback([]);
             return;
         }
         callback(result.TimeWastingDomains || []);
@@ -10,6 +11,7 @@ function getMonitoredWebsites(callback) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Variables
     var timeChartCanvas = document.getElementById('timeChart');
     var timePeriodToggles = document.querySelectorAll('.time-toggles button');
     var websiteListUl = document.getElementById('websiteList');
@@ -18,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var backButton = document.getElementById('backButton');
     var detailedTimeTableBody = detailedView.querySelector('tbody');
     var seeMoreChartLink = document.getElementById('seeMoreChart');
-    var timeTable = document.getElementById('timeTable'); // Added timeTable variable
+    var timeTable = document.getElementById('timeTable');
 
     var detailedViewWebsites = document.getElementById('detailedViewWebsites');
     var backButtonWebsites = document.getElementById('backButtonWebsites');
@@ -35,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var Y = document.getElementById('Y');
 
 
-    // Check if elements are found
+    // Ensuring elements are found
     if (!timeChartCanvas) console.error("Error: timeChartCanvas element not found");
     if (!timePeriodToggles.length) console.error("Error: timePeriodToggles elements not found");
     if (!websiteListUl) console.error("Error: websiteListUl element not found");
@@ -47,21 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!timeTable) console.error("Error: timeTable element not found");
 
     let timeChart = null;
-    let currentTimeData = {}; // Store fetched time data
+    let currentTimeData = {};
 
-    // Function to save the list of monitored websites to storage
-    function saveMonitoredWebsites(monitoredWebsites, callback) {
-        chrome.storage.local.set({ TimeWastingDomains: monitoredWebsites }, () => {
-            if (chrome.runtime.lastError) {
-                console.error("Error saving monitored domains:", chrome.runtime.lastError);
-            } else {
-                console.log("Monitored domains saved:", monitoredWebsites);
-                if (callback) callback();
-            }
-        });
-    }
-
-    // Function to populate the website list in the popup
+    // Populating list of websites
     function populateWebsiteList(timeData, monitoredWebsites) {
         let countOfWebsites = monitoredWebsites.length;
 
@@ -70,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        websiteListUl.innerHTML = ""; // Clear existing list items
+        websiteListUl.innerHTML = "";
 
         if (monitoredWebsites.length === 0) {
             const listItem = document.createElement('li');
@@ -79,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Oblicz czas całkowity dla każdej domeny
+        // Calculating hole time for every domain
         const websiteTimePairs = monitoredWebsites.map(website => {
             let totalTime = 0;
             if (timeData[website]) {
@@ -90,12 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return { website, totalTime };
         });
 
-        // Posortuj malejąco po czasie i wybierz top 4
+        // Top 4 webistes only
         const topWebsites = websiteTimePairs
             .sort((a, b) => b.totalTime - a.totalTime)
             .slice(0, 3);
 
-        // Renderuj tylko top 4 strony
         topWebsites.forEach(({ website, totalTime }) => {
             const totalMinutes = Math.floor(totalTime / (1000 * 60));
             const hours = Math.floor(totalMinutes / 60);
@@ -109,14 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // Function to render the pie chart
+    // Rendering pie chart
     function renderChart(data, labels) {
         if (!timeChartCanvas) {
             console.error("Cannot render chart: timeChartCanvas not found.");
             return;
         }
         if (timeChart) {
-            timeChart.destroy(); // Destroy previous chart instance
+            timeChart.destroy();
         }
 
         const ctx = timeChartCanvas.getContext('2d');
@@ -132,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         '#604F2F', // text-dark
                         '#68534D', // text-soft
                         '#FDECEF', // bg-main
-                        '#F2C14E', // bg-section (can reuse colors or add more)
+                        '#F2C14E', // bg-section
                     ],
                     borderColor: '#fff',
                     borderWidth: 2
@@ -147,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         position: 'right',
                         labels: {
                             font: {
-                                size: 13 // Increase font size for better readability
+                                size: 13
                             }
                         }
                     },
@@ -158,11 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    // Wymuś ponownie zastosowanie klas centrowania
     timeChartCanvas.parentElement.classList.add('chart-section'); 
 
 
-    // Function to process time data for the chart based on period
+    // Procesing time data for chart
     function processTimeDataForChart(timeData, period) {
         const now = new Date();
         let filteredData = {};
@@ -228,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return { data, labels };
     }
 
-    // Function to process time data for the detailed table based on period
+    // Procesing time data for detailed view
     function processTimeDataForDetailedTable(timeData, period) {
         const now = new Date();
         let filteredData = {};
@@ -289,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
-    // Function to populate the detailed time table
+    // Populating detailed view table
     function populateDetailedTable(timeData) {
         if (!detailedTimeTableBody) {
             console.error("Cannot populate detailed table: detailedTimeTableBody not found.");
@@ -322,33 +310,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to show the detailed view
+    // Showing detailed view
     function showDetailedView() {
         if (document.querySelector('.chart-section')) document.querySelector('.chart-section').style.display = 'none';
         if (document.querySelector('.websites-section')) document.querySelector('.websites-section').style.display = 'none';
-        if (timeTable) timeTable.style.display = 'none'; // Hide the original table
+        if (timeTable) timeTable.style.display = 'none';
         if (detailedView) detailedView.style.display = 'block';
-        // Populate detailed table with default period (Day) data when showing
         const filteredDetailedData = processTimeDataForDetailedTable(currentTimeData, 'D');
         populateDetailedTable(filteredDetailedData);
     }
 
+    // Showing list of blocked domaines
     function showDetailedViewWebsites(){
         if (document.querySelector('.chart-section')) document.querySelector('.chart-section').style.display = 'none';
         if (document.querySelector('.websites-section')) document.querySelector('.websites-section').style.display = 'none';
-        if (timeTable) timeTable.style.display = 'none'; // Ukryj oryginalną tabelę
-        if (detailedView) detailedView.style.display = 'none'; // Ukryj szczegółowy widok czasu
+        if (timeTable) timeTable.style.display = 'none';
+        if (detailedView) detailedView.style.display = 'none';
         if (detailedViewWebsites) detailedViewWebsites.style.display = 'block';
 
         getMonitoredWebsites((monitoredWebsites) => {
-            // ZMIEŃ TĘ LINIĘ:
-            // populateDetailedTableWebsites(monitoredWebsites);
-            // NA TĘ:
             renderCustomWebsites(monitoredWebsites);
         });
     }
 
-    // Function to show the main view
+    // Showing main menu
     function showMainView() {
         const chartSection = document.querySelector('.chart-section');
         const websitesSection = document.querySelector('.websites-section');
@@ -359,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (detailedViewWebsites) detailedViewWebsites.style.display = 'none';
     }
 
+    // rendering list of blocked websites
     function renderCustomWebsites(websites) {
         const tableBody = document.querySelector("#CustomizeWebsitesTable tbody");
         tableBody.innerHTML = "";
@@ -392,6 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // adding webite to blecked domaines
     document.getElementById("addWebsiteButton").addEventListener("click", () => {
         const newSite = prompt("Enter a new website domain:");
         if (newSite) {
@@ -413,20 +400,15 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTimeData = result.timeData;
         console.log("Loaded timeData in popup:", currentTimeData);
 
-        // Render chart for the default period (Day)
         const { data, labels } = processTimeDataForChart(currentTimeData, 'D');
         renderChart(data, labels);
 
-        // Populate the website list using monitored websites
         getMonitoredWebsites((monitoredWebsites) => {
             populateWebsiteList(currentTimeData, monitoredWebsites);
         });
-
-        // Populate the detailed table (initially hidden) - This is now handled when showing the detailed view
-        // populateDetailedTable(currentTimeData);
     });
 
-    // Add event listeners to time period toggles
+    // event listeners to time period toggles
     if (timePeriodToggles) {
         timePeriodToggles.forEach(button => {
             button.addEventListener('click', (event) => {
@@ -436,20 +418,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const { data, labels } = processTimeDataForChart(currentTimeData, period);
                 renderChart(data, labels);
         
-                // 🛠 Przywróć widok główny jeśli był ukryty
                 showMainView();
             });
         });
     }
 
-    // Add event listener for Customize List button
+    // event listener for Customize List button
     if (customizeListButton) {
         customizeListButton.addEventListener('click', () => {
             showDetailedViewWebsites();
         });
     }
 
-    // Add event listener for "see more..." link in chart section
+    // event listener for "see more..." link in chart section
     if (seeMoreChartLink) {
         seeMoreChartLink.addEventListener('click', (event) => {
             event.preventDefault();
@@ -457,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add event listener for the back button in detailed view
+    // event listener for the back button in detailed view
     if (backButton) {
         backButton.addEventListener('click', (event) => {
             event.preventDefault();
@@ -465,6 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // event listener for back button
     if(backButtonWebsites){
         backButtonWebsites.addEventListener('click', (event)=> {
             event.preventDefault();
@@ -472,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add event listeners to detailed view time period toggles
+    // event listeners to detailed view time period toggles
     const detailedTimePeriodToggles = document.querySelectorAll('.time-toggles-detailed button');
     if (detailedTimePeriodToggles) {
         detailedTimePeriodToggles.forEach(button => {
@@ -485,15 +467,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // updating list of blocked websites
     chrome.storage.onChanged.addListener((changes, namespace) => {
         if (namespace === 'local' && changes.TimeWastingDomains) {
             console.log("TimeWastingDomains changed in storage. Updating views.");
             const newMonitoredWebsites = changes.TimeWastingDomains.newValue || [];
 
-            // 1. Zaktualizuj główną listę stron
             populateWebsiteList(currentTimeData, newMonitoredWebsites);
 
-            // 2. Zaktualizuj listę w widoku dostosowywania, jeśli jest widoczna
             if (detailedViewWebsites && detailedViewWebsites.style.display !== 'none') {
                 renderCustomWebsites(newMonitoredWebsites);
             }
