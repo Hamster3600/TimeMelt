@@ -36,11 +36,11 @@ function addWebsite(domain, sendResponse) {
             currentList.push(domain);
             chrome.storage.local.set({ TimeWastingDomains: currentList }, () => {
                 cachedDomainList = currentList;
-                console.log(`Dodano domenę do TimeWastingDomains: ${domain}`);
+                console.log(`Domain was added to time wasting domains: ${domain}`);
                 sendResponse({ success: true });
             });
         } else {
-            sendResponse({ success: false, message: "Domena już istnieje" });
+            sendResponse({ success: false, message: "Domain already exists" });
         }
     });
 
@@ -56,11 +56,11 @@ function removeWebsite(domain, sendResponse) {
             currentList.splice(index, 1);
             chrome.storage.local.set({ TimeWastingDomains: currentList }, () => {
                 cachedDomainList = currentList;
-                console.log(`Usunięto domenę z TimeWastingDomains: ${domain}`);
+                console.log(`Domain was removed from time wasting domains: ${domain}`);
                 sendResponse({ success: true });
             });
         } else {
-            sendResponse({ success: false, message: "Domena nie znaleziona" });
+            sendResponse({ success: false, message: "Domain wasn't found" });
         }
     });
 
