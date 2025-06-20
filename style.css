@@ -1,35 +1,24 @@
 :root {
-    /* Główny kolor tła strony/aplikacji - Jasny, neutralny szary (bez zmian) */
     --bg-main: #D5D5D5;
 
-    /* Kolor tła dla sekcji/paneli - Ciepły, stonowany szaro-brązowy/oliwkowy beż (bez zmian) */
     --bg-section: #ADA597;
 
-    /* Ciemny kolor tekstu, np. dla nagłówków i ważnych informacji - Ciemny, głęboki granat/stalowy niebieski (bez zmian) */
     --text-dark: #384452;
 
-    /* Miękki, delikatniejszy kolor tekstu - Bardzo ciemny, prawie czarny granat (bez zmian) */
     --text-soft: #10233A;
 
-    /* NOWY GŁÓWNY KOLOR AKCENTUJĄCY - Głęboki, stonowany złoty/mosiądz. Energetyczny, ale elegancki i nie jaskrawy. */
-    --accent-main: #c98210; /* A rich, muted gold/brass. Strong presence without being jarring. */
+    --accent-main: #c98210; 
 
-    /* Trzeciorzędny kolor akcentujący - Bardzo jasny odcień nowego accent-main (subtelny złoty beż) */
-    --accent-third: #EBDAC5; /* Lighter, desaturated version of the new accent-main for active states. */
+    --accent-third: #EBDAC5; 
 
-    /* Drugorzędny kolor akcentujący, do wyróżnień lub stanów hover - Jasny szary (bez zmian, dobrze pełni rolę neutralnego hovera) */
     --accent-secondary: #B0B0B0;
 
-    /* Kolor tła dla kart/komponentów wewnątrz sekcji - Czysta biel (bez zmian) */
     --card-bg: #FFFFFF;
 
-    /* Ciemniejszy kolor tła, prawdopodobnie dla tła wierszy tabeli - Jasny, kremowy/bardzo jasny beż (bez zmian) */
     --bg-dark: #F5F5DC;
 
-    /* Główny kolor tekstu - Granat (bez zmian) */
     --text-main: #384452;
 
-    /* Wyciszony kolor tekstu, np. dla tekstu pomocniczego lub stylizowanego na kursywę - Jaśniejszy granat/szaroniebieski (bez zmian) */
     --text-muted: #6B778D;
 }
 body {
@@ -52,7 +41,7 @@ body {
     left: 40px;
     font-size: 15px;
     height: 25px !important;
-    color: var(--text-dark); /* Zmieniony kolor linku */
+    color: var(--text-dark);
     text-decoration: none;
 }
 
@@ -96,11 +85,10 @@ body {
     margin-bottom: 15px;
 }
 
-/* Back button style */
 #backButton,
 #backButtonWebsites {
-    background-color: var(--accent-main); /* Subtelne tło */
-    color: var(--card-bg); /* Ciemny tekst */
+    background-color: var(--accent-main); 
+    color: var(--card-bg);
     border: none;
     border-radius: 25px;
     padding: 8px 15px;
@@ -113,8 +101,8 @@ body {
 
 #backButton:hover,
 #backButtonWebsites:hover {
-    background-color: var(--accent-secondary); /* Jasny żółty na hover */
-    color: var(--text-dark); /* Tekst pozostaje ciemny dla kontrastu */
+    background-color: var(--accent-secondary); 
+    color: var(--text-dark); 
 }
 
 
@@ -135,7 +123,7 @@ body {
 }
 
 #detailedTimeTable th {
-    background-color: var(--accent-main); /* Nagłówek tabeli - akcent główny */
+    background-color: var(--accent-main); 
     color: var(--card-bg);
     font-weight: bold;
 }
@@ -176,7 +164,7 @@ body {
 }
 
 #CustomizeWebsitesTable th {
-    background-color: var(--accent-main); /* Nagłówek tabeli - akcent główny */
+    background-color: var(--accent-main); 
     color: var(--card-bg);
     font-weight: bold;
 }
@@ -204,17 +192,16 @@ body {
     margin-bottom: 10px !important;
 }
 
-/* Adjusting Add Website Button position */
 #addWebsiteButton {
     margin-top: 10px;
-    margin-left: 215px; /* Adjust as needed */
+    margin-left: 215px; 
     margin-bottom: 0px !important;
 }
 
 h1 {
     margin-top: 10px;
     text-align: center;
-    color: var(--text-dark); /* Zmieniony kolor tytułu głównego na text-dark */
+    color: var(--text-dark);
     font-size: 40px;
     margin-bottom: 10px;
 }
@@ -253,7 +240,7 @@ tr:nth-child(even) td {
 
 tr:hover td {
     background-color: var(--accent-secondary);
-    color: var(--card-bg); /* Tekst biały na hover */
+    color: var(--card-bg); 
 }
 
 td:first-child {
@@ -267,8 +254,8 @@ td:last-child {
 
 /* General button style */
 button {
-    background-color: var(--accent-main); /* Główny akcent dla domyślnych przycisków */
-    color: var(--card-bg); /* Biały tekst */
+    background-color: var(--accent-main); 
+    color: var(--card-bg); 
     border: none;
     border-radius: 25px;
     padding: 10px 20px;
@@ -279,11 +266,10 @@ button {
 }
 
 button:hover {
-    background-color: var(--accent-secondary); /* Jasny żółty na hover */
-    color: var(--text-dark); /* Tekst ciemny na hover */
+    background-color: var(--accent-secondary); 
+    color: var(--text-dark); 
 }
 
-/* Customize list button specific style */
 #customizeList {
     background-color: var(--accent-main);
     color: var(--card-bg);
@@ -301,7 +287,6 @@ button:hover {
     color: var(--text-dark);
 }
 
-/* Add website button specific style */
 #addWebsiteButton {
     background-color: var(--accent-main);
     color: var(--card-bg);
@@ -319,10 +304,9 @@ button:hover {
     color: var(--text-dark);
 }
 
-/* Delete button specific style in Customize Websites Table */
 .customize-table button.delete-button {
-    background-color: var(--accent-main); /* Stonowana terakota */
-    color: var(--card-bg); /* Biały tekst */
+    background-color: var(--accent-main); 
+    color: var(--card-bg); 
     border: none;
     padding: 5px 10px;
     border-radius: 3px;
@@ -331,7 +315,7 @@ button:hover {
 }
 
 .customize-table button.delete-button:hover {
-    background-color: var(--text-dark); /* Ciemny morski/granat na hover */
+    background-color: var(--text-dark); 
     color: var(--card-bg);
 }
 
@@ -356,10 +340,9 @@ button:hover {
     justify-content: center;
 }
 
-/* Time Period Toggles (D, W, M, Y) - Main View */
 .time-toggles button {
-    background-color: var(--accent-main); /* Domyślny kolor tła */
-    color: var(--card-bg); /* Biały tekst na domyślnym */
+    background-color: var(--accent-main); 
+    color: var(--card-bg); 
     border: none;
     border-radius: 15px;
     padding: 5px 10px;
@@ -370,11 +353,10 @@ button:hover {
 }
 
 .time-toggles button:hover {
-    background-color: var(--accent-secondary); /* Jasny żółty na hover */
-    color: var(--text-dark); /* Ciemny tekst na hover */
+    background-color: var(--accent-secondary);
+    color: var(--text-dark); 
 }
 
-/* Time Period Toggles (D, W, M, Y) - Detailed View */
 .time-toggles-detailed {
     display: flex;
     justify-content: center;
@@ -382,8 +364,8 @@ button:hover {
 }
 
 .time-toggles-detailed button {
-    background-color: var(--accent-main); /* Domyślny kolor tła */
-    color: var(--card-bg); /* Biały tekst na domyślnym */
+    background-color: var(--accent-main); 
+    color: var(--card-bg);
     border: none;
     border-radius: 15px;
     padding: 5px 10px;
@@ -394,8 +376,8 @@ button:hover {
 }
 
 .time-toggles-detailed button:hover {
-    background-color: var(--accent-secondary); /* Jasny żółty na hover */
-    color: var(--text-dark); /* Ciemny tekst na hover */
+    background-color: var(--accent-secondary); 
+    color: var(--text-dark); 
 }
 
 #timeChart {
@@ -430,7 +412,7 @@ button:hover {
     font-size: 14px;
 }
 
-#websiteList li strong { /* Zmieniono span na strong, aby pasowało do JS innerHTML */
+#websiteList li strong {
     font-weight: bold;
     color: var(--text-dark);
 }
@@ -449,4 +431,112 @@ button:hover {
 
 .chart-section a:hover, .websites-section a:hover {
     text-decoration: underline;
+}
+
+.modal {
+    display: none;
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px; 
+    backdrop-filter: blur(5px); 
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    margin: 5% auto; 
+    padding: 25px;
+    border: 1px solid var(--accent-secondary);
+    width: 80%;
+    max-width: 400px; 
+    border-radius: 15px; 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+    position: relative;
+    text-align: center;
+    animation: fadeInScale 0.3s ease-out; 
+}
+
+.close-button {
+    color: var(--text-muted);
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute; 
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+#newWebsiteInput {
+    width: calc(100% - 20px); 
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid var(--accent-secondary);
+    border-radius: 8px; 
+    font-size: 15px;
+    color: var(--text-main);
+    background-color: var(--bg-main); 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#newWebsiteInput:focus {
+    border-color: var(--accent-main);
+    box-shadow: 0 0 0 2px rgba(var(--accent-main-rgb), 0.3); 
+    outline: none; 
+}
+
+.modal-content button {
+    margin-top: 10px;
+    padding: 12px 25px; 
+    font-size: 15px;
+}
+
+.message {
+    margin-top: 15px;
+    font-size: 14px;
+    color: var(--text-muted); 
+    font-weight: normal;
+}
+
+.message.error {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.message.success {
+    color: #28a745; 
+    font-weight: bold;
+}
+
+#alertModal .modal-content button {
+    background-color: var(--accent-main); 
+    color: var(--card-bg);
+}
+
+#alertModal .modal-content button:hover {
+    background-color: var(--accent-secondary);
+    color: var(--text-dark);
+}
+
+/* Animacje (Nowe!) */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

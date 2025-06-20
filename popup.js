@@ -36,6 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
     var M = document.getElementById('M');
     var Y = document.getElementById('Y');
 
+    var addWebsiteModal = document.getElementById('addWebsiteModal');
+    var newWebsiteInput = document.getElementById('newWebsiteInput');
+    var confirmAddWebsiteButton = document.getElementById('confirmAddWebsiteButton');
+    var modalMessage = document.getElementById('modalMessage');
+    var closeAddWebsiteModalButton = document.getElementById('closeAddWebsiteModalButton'); 
+
+    var alertModal = document.getElementById('alertModal');
+    var alertTitle = document.getElementById('alertTitle');
+    var alertMessageContent = document.getElementById('alertMessageContent');
+    var confirmAlertButton = document.getElementById('confirmAlertButton'); 
+    var closeAlertModalButton = document.getElementById('closeAlertModalButton'); 
+
 
     // Ensuring elements are found
     if (!timeChartCanvas) console.error("Error: timeChartCanvas element not found");
@@ -47,6 +59,32 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!detailedTimeTableBody) console.error("Error: detailedTimeTableBody element not found");
     if (!seeMoreChartLink) console.error("Error: seeMoreChartLink element not found");
     if (!timeTable) console.error("Error: timeTable element not found");
+
+    if (!detailedViewWebsites) console.log("Error: detailedViewWebsites element no found");
+    if (!backButtonWebsites) console.log("Error: backButtonWebsites element no found");
+    if (!CustomizeWebsitesTable) console.log("Error: CustomizeWebsitesTable element no found");
+
+    if (!DDetailed) console.log("Error: DDetailed element no found");
+    if (!WDetailed) console.log("Error: WDetailed element no found");
+    if (!MDetailed) console.log("Error: MDetailed element no found");
+    if (!YDetailed) console.log("Error: YDetailed element no found");
+
+    if (!D) console.log("Error: D element no found");
+    if (!W) console.log("Error: W element no found");
+    if (!M) console.log("Error: M element no found");
+    if (!Y) console.log("Error: Y element no found");
+
+    if (!addWebsiteModal) console.log("Error: addWebsiteModal element no found");
+    if (!newWebsiteInput) console.log("Error: newWebsiteInput element no found");
+    if (!confirmAddWebsiteButton) console.log("Error: confirmAddWebsiteButton element no found");
+    if (!modalMessage) console.log("Error: modalMessage element no found");
+    if (!closeAddWebsiteModalButton) console.log("Error: closeAddWebsiteModalButton element no found");
+
+    if (!alertModal) console.log("Error: alertModal element no found");
+    if (!alertTitle) console.log("Error: alertTitle element no found");
+    if (!alertMessageContent) console.log("Error: alertMessageContent element no found");
+    if (!confirmAlertButton) console.log("Error: confirmAlertButton element no found");
+    if (!closeAlertModalButton) console.log("Error: closeAlertModalButton element no found");
 
     let timeChart = null;
     let currentTimeData = {};
@@ -312,26 +350,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         detailedTimeTableBody.innerHTML = "";
         let hasData = false;
+        let aggregatedData = {};
 
         for (const [domain, dateEntries] of Object.entries(timeData)) {
             if (domain === "null") continue;
 
-            for (const [date, { time }] of Object.entries(dateEntries)) {
-                const totalMinutes = Math.floor(time / (1000 * 60));
-                const hours = Math.floor(totalMinutes / 60);
-                const minutes = totalMinutes % 60;
-                const formattedTime = `${hours}h ${minutes}m`;
-
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${domain}</td><td>${formattedTime}</td><td>${date}</td>`; 
-                detailedTimeTableBody.appendChild(row);
-                hasData = true;
+            let cleanedDomain = domain.replace(/^www\./, '');
+            if (!aggregatedData[cleanedDomain]) {
+                aggregatedData[cleanedDomain] = 0;
             }
+
+            for (const [date, { time }] of Object.entries(dateEntries)) {
+                aggregatedData[cleanedDomain] += time;
+            }
+        }
+
+        for (const [domain, totalTime] of Object.entries(aggregatedData)) {
+            const totalMinutes = Math.floor(totalTime / (1000 * 60));
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            const formattedTime = `${hours}h ${minutes}m`;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${domain}</td><td>${formattedTime}</td>`;
+            detailedTimeTableBody.appendChild(row);
+            hasData = true;
         }
 
         if (!hasData) {
             const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="3">No data available</td>`;
+            row.innerHTML = `<td colspan="2">No data available</td>`;
             detailedTimeTableBody.appendChild(row);
         }
     }
@@ -393,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             renderCustomWebsites(result.TimeWastingDomains || []);
                         });
                     } else {
-                        alert("Błąd przy usuwaniu: " + (response?.message || ""));
+                        showAlertModal("Error", "Błąd przy usuwaniu: " + (response?.message || ""), true);
                     }
                 });
             });
@@ -405,23 +453,81 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
-    // adding webite to blecked domaines
+    // clicking Add button
     document.getElementById("addWebsiteButton").addEventListener("click", () => {
-        const newSite = prompt("Enter a new website domain:");
+        showAddWebsiteModal();
+    });
+
+    // managing button "Add Website"
+    confirmAddWebsiteButton.addEventListener("click", () => {
+        const newSite = newWebsiteInput.value.trim();
         if (newSite) {
             chrome.runtime.sendMessage({ action: "addWebsite", domain: newSite }, (response) => {
                 if (response?.success) {
+                    displayModalMessage("Website added successfully!", false);
+                    newWebsiteInput.value = '';
                     chrome.storage.local.get(["TimeWastingDomains"], (result) => {
                         renderCustomWebsites(result.TimeWastingDomains || []);
                     });
                 } else {
-                    alert("Błąd przy dodawaniu: " + (response?.message || ""));
+                    displayModalMessage("Error adding website: " + (response?.message || "Domain might already exist or is invalid."), true);
                 }
             });
+        } else {
+            displayModalMessage("Please enter a domain.", true); 
         }
     });
 
+    // closing pop-up
+    closeAddWebsiteModalButton.addEventListener('click', hideAddWebsiteModal);
+
+    // adding website after closing
+    window.addEventListener('click', (event) => {
+        if (event.target === addWebsiteModal) {
+            hideAddWebsiteModal();
+        }
+    });
+
+    // managing buttons "OK" and "x" in pop-up
+    confirmAlertButton.addEventListener('click', hideAlertModal);
+    closeAlertModalButton.addEventListener('click', hideAlertModal);
+
+    // closing pop-up after clicking outside it
+    window.addEventListener('click', (event) => {
+        if (event.target === alertModal) {
+            hideAlertModal();
+        }
+    });
+
+    // models for adding website
+    function showAddWebsiteModal() {
+        addWebsiteModal.style.display = 'block';
+        newWebsiteInput.value = '';
+        modalMessage.textContent = '';
+        modalMessage.className = 'message';
+        newWebsiteInput.focus();
+    }
+
+    function hideAddWebsiteModal() {
+        addWebsiteModal.style.display = 'none';
+    }
+
+    function displayModalMessage(message, isError = false) {
+        modalMessage.textContent = message;
+        modalMessage.className = isError ? 'message error' : 'message success';
+    }
+
+    // managing models for adding websites
+    function showAlertModal(title, message, isError = false) {
+        alertTitle.textContent = title;
+        alertMessageContent.textContent = message;
+        alertMessageContent.className = isError ? 'message error' : 'message success';
+        alertModal.style.display = 'block';
+    }
+
+    function hideAlertModal() {
+        alertModal.style.display = 'none';
+    }
 
     // Initial data load and rendering
     chrome.storage.local.get({ timeData: {} }, (result) => {

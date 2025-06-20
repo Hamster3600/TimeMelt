@@ -35,7 +35,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Wiersze będą dodawane tutaj -->
+            <!-- Rows will be added here -->
         </tbody>
     </table>
 
@@ -52,8 +52,7 @@
             <thead>
                 <tr>
                     <th>Website</th>
-                    <th>Time Spent (s)</th>
-                    <th>Date</th>
+                    <th>Time Spent (h,m)</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,13 +71,29 @@
             <thead>
                 <tr>
                     <th>Website</th>
-                    <th>Action</th> <!-- Dodajemy nową kolumnę na przyciski -->
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Website rows will be added here -->
             </tbody>
         </table>
+    </div>
+    
+    <div id="addWebsiteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeAddWebsiteModalButton">&times;</span> <h2>Add New Website</h2>
+            <input type="text" id="newWebsiteInput" placeholder="Enter website domain (e.g., example.com)">
+            <button id="confirmAddWebsiteButton">Add Website</button>
+            <p id="modalMessage" class="message"></p>
+        </div>
+    </div>
+
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeAlertModalButton">&times;</span> <h2 id="alertTitle"></h2>
+            <p id="alertMessageContent"></p>
+            <button id="confirmAlertButton">OK</button> </div>
     </div>
 
     <script src="popup.js"></script>
