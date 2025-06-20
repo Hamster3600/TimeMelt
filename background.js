@@ -112,7 +112,7 @@ function addDomainToBlockedList(newDomain) {
 
 // Function to save time for the current domain
 function saveTimeForCurrentDomain() {
-    let nowTab = activeDomain;
+    let nowTab = activeDomain?.replace(/^www\./, '');
     if (nowTab && startTime) {
         isDomainBlocked(nowTab, (blocked) => {
             if (blocked) {

@@ -97,8 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const textDark = styles.getPropertyValue('--text-dark').trim();
     const cardBg = styles.getPropertyValue('--card-bg').trim();
 
-    function populateWebsiteList(timeData, monitoredWebsites) {
 
+    // populating second section
+    function populateWebsiteList(timeData, monitoredWebsites) {
         if (!websiteListUl) {
             console.error("Cannot populate website list: websiteListUl not found.");
             return;
@@ -114,21 +115,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const websiteTimePairs = monitoredWebsites.map(website => {
-            let cleanedWebsite = website.replace(/^www\./, '');
             let totalTime = 0;
             if (timeData[website]) {
-                for (const date in timeData[website]) {
-                    totalTime += timeData[website][date].time;
+                for (const date in timeData[website]) { 
+                    totalTime += timeData[website][date].time; 
                 }
             }
-            return { website: cleanedWebsite, totalTime };
+            return { website: website, totalTime: totalTime };
         });
 
         const topWebsites = websiteTimePairs
             .sort((a, b) => b.totalTime - a.totalTime)
             .slice(0, 3);
 
-        topWebsites.forEach(({ website, totalTime }) => { 
+        topWebsites.forEach(({ website, totalTime }) => {
             const totalMinutes = Math.floor(totalTime / (1000 * 60));
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
