@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "TimeMelt - Digital Detox Clock",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A browser extension to track and analyze your online activity for better time management.",
     "permissions": [
         "storage",
