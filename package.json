@@ -1,0 +1,27 @@
+{
+  "name": "timemelt",
+  "version": "1.0.0",
+  "description": "![TimeMelt Icon](images/banner.png)",
+  "main": "popup.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hamster3600/TimeMelt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hamster3600/TimeMelt/issues"
+  },
+  "homepage": "https://github.com/Hamster3600/TimeMelt#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.2.2",
+    "typescript": "^6.0.3"
+  }
+}
