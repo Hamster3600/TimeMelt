@@ -540,3 +540,12 @@ button:hover {
         transform: scale(1);
     }
 }
+
+#detailedViewWebsites {
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+#detailedViewWebsites::-webkit-scrollbar {
+    display: none;
+}

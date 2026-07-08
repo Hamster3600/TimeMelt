@@ -3,23 +3,13 @@
     "name": "TimeMelt - Digital Detox Clock",
     "version": "1.0.1",
     "description": "A browser extension to track and analyze your online activity for better time management.",
-    "permissions": [
-        "storage",
-        "tabs"
-    ],
+    "permissions": ["storage", "tabs"],
     "background": {
-    "service_worker": "background.js"
+        "service_worker": "build/background.js"
     },
     "action": {
         "default_popup": "popup.html",
-        "default_icon": {
-            "128": "images/icon-128.png"
-        }
+        "default_icon": { "128": "images/icon-128.png" }
     },
-    "icons": {
-        "128": "images/icon-128.png"
-    },
-    "content_security_policy": {
-        "extension_pages": "script-src 'self'; object-src 'self'"
-    }
+    "icons": { "128": "images/icon-128.png" }
 }
