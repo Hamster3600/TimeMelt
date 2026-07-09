@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Wykres początkowy
     const { data, labels } = processChartData(timeData, 'D');
     renderChart(timeChartCanvas, data, labels, colors);
+    highlightToggle('.time-toggles button', document.getElementById('D'), '#EBDAC5', '#c98210');
     // Lista top 3
     populateWebsiteList(document.getElementById('websiteList'), timeData, monitored);
     // Event: period toggles (chart)
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const period = btn.id;
             const { data, labels } = processChartData(timeData, period);
             renderChart(timeChartCanvas, data, labels, colors);
-            // podświetlenie aktywnego – ustawiasz inline style
+            highlightToggle('.time-toggles button', btn, '#EBDAC5', '#c98210');
         });
     });
     // Event: Customize list
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const period = btn.id.replace('-detailed', '');
             const aggregated = processDetailedData(timeData, period);
             populateDetailedTable(document.querySelector('#detailedTimeTable tbody'), aggregated);
+            highlightToggle('.time-toggles-detailed button', btn, '#EBDAC5', '#c98210');
         });
     });
     // Event: add website confirm
@@ -69,6 +71,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     setupModals();
 });
+function highlightToggle(selector, active, activeBg, normalBg) {
+    document.querySelectorAll(selector).forEach(b => {
+        b.style.backgroundColor = b === active ? activeBg : normalBg;
+        b.style.color = b === active ? '#384452' : '#FFFFFF';
+    });
+}
 function toggleView(view) {
     document.querySelector('.chart-section').style.display = view === 'main' ? 'flex' : 'none';
     document.querySelector('.websites-section').style.display = view === 'main' ? 'flex' : 'none';

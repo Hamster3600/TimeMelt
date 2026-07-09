@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Wykres początkowy
     const { data, labels } = processChartData(timeData, 'D');
     renderChart(timeChartCanvas, data, labels, colors);
+    highlightToggle('.time-toggles button', document.getElementById('D')!, '#EBDAC5', '#c98210');
 
     // Lista top 3
     populateWebsiteList(document.getElementById('websiteList') as HTMLUListElement, timeData, monitored);
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const period = btn.id as Period;
             const { data, labels } = processChartData(timeData, period);
             renderChart(timeChartCanvas, data, labels, colors);
-            // podświetlenie aktywnego – ustawiasz inline style
+            highlightToggle('.time-toggles button', btn, '#EBDAC5', '#c98210');
         });
     });
 
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.querySelector('#detailedTimeTable tbody') as HTMLTableSectionElement,
                 aggregated
             );
+            highlightToggle('.time-toggles-detailed button', btn, '#EBDAC5', '#c98210');
         });
     });
 
@@ -88,6 +90,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     setupModals();
 });
+
+function highlightToggle(selector: string, active: HTMLElement, activeBg: string, normalBg: string): void {
+    document.querySelectorAll<HTMLButtonElement>(selector).forEach(b => {
+        b.style.backgroundColor = b === active ? activeBg : normalBg;
+        b.style.color = b === active ? '#384452' : '#FFFFFF';
+    });
+}
 
 function toggleView(view: 'main' | 'detailedView' | 'detailedViewWebsites'): void {
     document.querySelector<HTMLElement>('.chart-section')!.style.display = view === 'main' ? 'flex' : 'none';
